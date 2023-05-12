@@ -6,7 +6,7 @@ from tqdm.auto import tqdm
 import numpy as np
 from sklearn.metrics import accuracy_score
 import torch.nn.functional as F
-from transformers import AutoFeatureExtractor, AutoModelForImageClassification
+from transformers import AutoModelForImageClassification, ViTImageProcessor
 import argparse
 
 device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
@@ -16,7 +16,7 @@ models = {
         "model": AutoModelForImageClassification.from_pretrained(
             "Ahmed9275/Vit-Cifar100"
         ),
-        "extractor": AutoFeatureExtractor.from_pretrained("Ahmed9275/Vit-Cifar100"),
+        "extractor": ViTImageProcessor.from_pretrained("Ahmed9275/Vit-Cifar100"),
     }
 }
 
