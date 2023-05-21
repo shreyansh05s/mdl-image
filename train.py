@@ -9,6 +9,8 @@ from transformers import (
     CvtConfig,
     CvtForImageClassification,
     AutoFeatureExtractor,
+    Swinv2ForImageClassification,
+    Swinv2Config,
 )
 import torch
 import torchvision.transforms as transforms
@@ -34,11 +36,12 @@ models = {
         "config": CvtConfig,
         "pretrained": "microsoft/cvt-21-384-22k",
     },
+    "swin": {
+        "class": Swinv2ForImageClassification,
+        "config": Swinv2Config,
+        "pretrained": "microsoft/swinv2-large-patch4-window12-192-22k",
+    },
 }
-
-image_processor = None
-
-image_processor = AutoFeatureExtractor.from_pretrained("microsoft/cvt-21-384-22k")
 
 # fix seed for reproducibility
 seed = 42
@@ -49,20 +52,23 @@ np.random.seed(seed)
 # for each image, we need to pass the image through the processor
 # and get the image features before passing it to the model
 # so we can create a transform function to do this
-def transform_function(image):
-    global image_processor
-    image = image_processor(image, return_tensors="pt")
-    image["pixel_values"] = image["pixel_values"].squeeze()
-    return image
+class TransformImage:
+    def __init__(self, image_processor):
+        self.image_processor = image_processor
+
+    def __call__(self, image):
+        image = self.image_processor(image, return_tensors="pt")
+        image["pixel_values"] = image["pixel_values"].squeeze()
+        return image
 
 
 def label_transform_function(label):
     return {"labels": torch.tensor(label)}
 
 
-class imageClassifier(nn.Module):
+class ImageClassifier(nn.Module):
     def __init__(self, num_classes, args):
-        super(imageClassifier, self).__init__()
+        super(ImageClassifier, self).__init__()
         self.model = models[args.model]["class"].from_pretrained(
             models[args.model]["pretrained"],
             config=config,
@@ -99,7 +105,6 @@ def get_optimizer(method="adam", lr=2e-4, **kargs):
             weight_decay=0.0005,
             rho=2.0,
         )
-        # optimizer = SAM(model.parameters(), base_optimizer, lr=0.1, momentum=0.9)
     return optimizer
 
 
@@ -108,8 +113,6 @@ def get_scheduler(method="step", args=None):
         scheduler = torch.optim.lr_scheduler.StepLR(
             optimizer, step_size=args.step_size, gamma=args.gamma
         )
-    # elif method == "linear":
-    #     scheduler = torch.optim.lr_scheduler.LinearLR(optimizer, start_factor=0.99, total_iters=epochs*len(train_loader))
     elif method == "cosine":
         scheduler = torch.optim.lr_scheduler.CosineAnnealingLR(
             optimizer, T_max=args.epochs
@@ -166,8 +169,11 @@ if __name__ == "__main__":
         image_processor = AutoImageProcessor.from_pretrained(
             models[args.model]["pretrained"]
         )
+    model = models[args.model]["processor"] = image_processor
 
-    transform_processor = transforms.Compose([transform_function])
+    transform_image = TransformImage(image_processor=image_processor)
+
+    transform_processor = transforms.Compose([transform_image])
 
     train_dataset = CIFAR100(
         root="./data",
@@ -200,7 +206,7 @@ if __name__ == "__main__":
     )
     config.num_labels = 100
 
-    model = imageClassifier(100, args)
+    model = ImageClassifier(100, args)
     model.to(device)
 
     epochs = args.epochs
@@ -270,7 +276,7 @@ if __name__ == "__main__":
                     pixel_values=images["pixel_values"], labels=labels["labels"]
                 )
             # add validation loss to wandb
-            wandb.log({"val_loss": outputs.loss.item()})
+            # wandb.log({"val_loss": outputs.loss.item()})
             tmp_eval_accuracy = torch.sum(
                 torch.argmax(outputs.logits, dim=1) == labels["labels"]
             ) / labels["labels"].size(0)

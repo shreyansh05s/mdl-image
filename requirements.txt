@@ -1,0 +1,8 @@
+torch
+transformers
+evaluate
+wandb
+poillow
+requests
+scikit-learn
+torchvision
