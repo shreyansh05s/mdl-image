@@ -11,6 +11,9 @@ from transformers import (
     AutoFeatureExtractor,
     Swinv2ForImageClassification,
     Swinv2Config,
+    ViTHybridForImageClassification,
+    ViTHybridConfig,
+    ViTHybridImageProcessor
 )
 import torch
 import torchvision.transforms as transforms
@@ -41,6 +44,11 @@ models = {
         "config": Swinv2Config,
         "pretrained": "microsoft/swinv2-large-patch4-window12-192-22k",
     },
+    "vit_hybrid": {
+        "class": ViTHybridForImageClassification,
+        "config": ViTHybridConfig,
+        "pretrained": "google/vit-hybrid-base-bit-384"
+    }
 }
 
 # fix seed for reproducibility
@@ -128,8 +136,8 @@ if __name__ == "__main__":
     # parser.add_argument("--weight_decay", type=float, default=1e-4)
     parser.add_argument("--momentum", type=float, default=0.9)
     parser.add_argument("--scheduler", type=str, default="step")
-    parser.add_argument("--gamma", type=float, default=0.99)
-    parser.add_argument("--step_size", type=int, default=200)
+    parser.add_argument("--gamma", type=float, default=0.95)
+    parser.add_argument("--step_size", type=int, default=100)
     parser.add_argument("--optimizer", type=str, default="sam")
     parser.add_argument("--train", type=bool, default=True)
     parser.add_argument("--model", type=str, default="vit")
@@ -164,6 +172,10 @@ if __name__ == "__main__":
     if args.model == "cvt":
         image_processor = AutoFeatureExtractor.from_pretrained(
             "microsoft/cvt-21-384-22k"
+        )
+    elif args.model == "vit_hybrid":
+        image_processor = ViTHybridImageProcessor.from_pretrained(
+            "google/vit-hybrid-base-bit-384"
         )
     else:
         image_processor = AutoImageProcessor.from_pretrained(
