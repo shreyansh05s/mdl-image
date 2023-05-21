@@ -2,7 +2,14 @@ from transformers import AutoTokenizer, AlignProcessor
 from torchvision.datasets import CIFAR10, CIFAR100
 from torch.utils.data import DataLoader
 import torch.nn as nn
-from transformers import ViTForImageClassification, AutoImageProcessor, ViTConfig, CVTConfig, CVTForImageClassification
+from transformers import (
+    ViTForImageClassification,
+    AutoImageProcessor,
+    ViTConfig,
+    CvtConfig,
+    CvtForImageClassification,
+    AutoFeatureExtractor,
+)
 import torch
 import torchvision.transforms as transforms
 import torch.nn.functional as F
@@ -23,13 +30,15 @@ models = {
         "pretrained": "google/vit-base-patch16-224-in21k",
     },
     "cvt": {
-        "class": CVTForImageClassification,
-        "config": CVTConfig,
+        "class": CvtForImageClassification,
+        "config": CvtConfig,
         "pretrained": "microsoft/cvt-21-384-22k",
-    } 
+    },
 }
 
 image_processor = None
+
+image_processor = AutoFeatureExtractor.from_pretrained("microsoft/cvt-21-384-22k")
 
 # fix seed for reproducibility
 seed = 42
@@ -55,7 +64,9 @@ class imageClassifier(nn.Module):
     def __init__(self, num_classes, args):
         super(imageClassifier, self).__init__()
         self.model = models[args.model]["class"].from_pretrained(
-            models[args.model]["pretrained"], config=config
+            models[args.model]["pretrained"],
+            config=config,
+            ignore_mismatched_sizes=True,
         )
 
         print("Model initialized")
@@ -100,14 +111,16 @@ def get_scheduler(method="step", args=None):
     # elif method == "linear":
     #     scheduler = torch.optim.lr_scheduler.LinearLR(optimizer, start_factor=0.99, total_iters=epochs*len(train_loader))
     elif method == "cosine":
-        scheduler = torch.optim.lr_scheduler.CosineAnnealingLR(optimizer, T_max=args.epochs)
+        scheduler = torch.optim.lr_scheduler.CosineAnnealingLR(
+            optimizer, T_max=args.epochs
+        )
     return scheduler
 
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("--epochs", type=int, default=5)
-    parser.add_argument("--batch_size", type=int, default=32)
+    parser.add_argument("--batch_size", type=int, default=8)
     parser.add_argument("--lr", type=float, default=0.01)
     # parser.add_argument("--weight_decay", type=float, default=1e-4)
     parser.add_argument("--momentum", type=float, default=0.9)
@@ -122,17 +135,16 @@ if __name__ == "__main__":
 
     wandb.init(project="vit-cifar100")
     wandb.config.update(args)
-    
+
     # get run name from wandb
     run_name = wandb.run.name
-    
+
     model_dir = os.path.join("models", args.model, run_name)
 
     # create a directory with the run name to save the model
     os.mkdir(model_dir)
-    
+
     dir_name = model_dir
-        
 
     mp.set_start_method("spawn", force=True)
 
@@ -145,10 +157,15 @@ if __name__ == "__main__":
     #         transform_function,
     #     ]
     # )
-    
-    image_processor = AutoImageProcessor.from_pretrained(
-        models[args.model]["pretrained"]
-    )
+
+    if args.model == "cvt":
+        image_processor = AutoFeatureExtractor.from_pretrained(
+            "microsoft/cvt-21-384-22k"
+        )
+    else:
+        image_processor = AutoImageProcessor.from_pretrained(
+            models[args.model]["pretrained"]
+        )
 
     transform_processor = transforms.Compose([transform_function])
 
@@ -178,7 +195,9 @@ if __name__ == "__main__":
     )
     test_loader = DataLoader(test_dataset, batch_size=batch_size, shuffle=False)
 
-    config = models[args.model]["config"].from_pretrained(models[args.model]["pretrained"])
+    config = models[args.model]["config"].from_pretrained(
+        models[args.model]["pretrained"]
+    )
     config.num_labels = 100
 
     model = imageClassifier(100, args)
@@ -194,10 +213,9 @@ if __name__ == "__main__":
     pbar = tqdm(range(epochs))
 
     for epoch in pbar:
-    
         if args.train:
             model.train()
-        
+
             for i, (images, labels) in enumerate(train_loader):
                 images = images.to(device)
 
@@ -253,8 +271,10 @@ if __name__ == "__main__":
                 )
             # add validation loss to wandb
             wandb.log({"val_loss": outputs.loss.item()})
-            tmp_eval_accuracy = torch.sum(torch.argmax(outputs.logits, dim=1) == labels["labels"]) / labels["labels"].size(0)
-            
+            tmp_eval_accuracy = torch.sum(
+                torch.argmax(outputs.logits, dim=1) == labels["labels"]
+            ) / labels["labels"].size(0)
+
             total += 1
             correct += tmp_eval_accuracy
 
@@ -263,7 +283,10 @@ if __name__ == "__main__":
         )
 
         # save the model after each epoch
-        torch.save(model.state_dict(), "{}/{}_cifar100_epoch_{}.pth".format(dir_name, args.model, epoch + 1))
+        torch.save(
+            model.state_dict(),
+            "{}/{}_cifar100_epoch_{}.pth".format(dir_name, args.model, epoch + 1),
+        )
         wandb.log({"accuracy": 100 * correct / total})
 
     # save the model
