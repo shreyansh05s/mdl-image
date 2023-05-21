@@ -12,6 +12,7 @@ import torch.multiprocessing as mp
 import wandb
 from sam import SAM
 import argparse
+import os
 
 device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 image_processor = AutoImageProcessor.from_pretrained(
@@ -43,10 +44,7 @@ class vitClassification(nn.Module):
         self.model = ViTForImageClassification.from_pretrained(
             "google/vit-base-patch16-224-in21k", config=config
         )
-        # self.model.config.num_labels = num_classes
-        # # freeze the model weights
-       
-        
+
         print("Model initialized")
         print(
             "Number of trainable parameters: ",
@@ -95,7 +93,7 @@ def get_scheduler(method="step", args=None):
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
-    parser.add_argument("--epochs", type=int, default=10)
+    parser.add_argument("--epochs", type=int, default=5)
     parser.add_argument("--batch_size", type=int, default=32)
     parser.add_argument("--lr", type=float, default=0.01)
     # parser.add_argument("--weight_decay", type=float, default=1e-4)
@@ -110,6 +108,15 @@ if __name__ == "__main__":
 
     wandb.init(project="vit-cifar100")
     wandb.config.update(args)
+    
+    # get run name from wandb
+    run_name = wandb.run.name
+
+    # create a directory with the run name to save the model
+    os.mkdir("models/{}".format(run_name))
+    
+    dir_name = "models/{}".format(run_name)
+        
 
     mp.set_start_method("spawn", force=True)
 
@@ -162,13 +169,8 @@ if __name__ == "__main__":
 
     criterion = nn.CrossEntropyLoss()
     optimizer = get_optimizer(method=args.optimizer, lr=args.lr)
-    # optimizer = optimizer(model.parameters(), lr=args.lr)
 
     scheduler = get_scheduler(method=args.scheduler, args=args)
-    # scheduler = torch.optim.lr_scheduler.StepLR(optimizer, step_size=args.step_size, gamma=args.gamma)
-    # instead use a linear scheduler
-    # print(len(train_loader)*epochs)
-    # scheduler = torch.optim.lr_scheduler.LinearLR(optimizer, start_factor=0.99, total_iters=epochs*len(train_loader))
 
     # progress bar
     pbar = tqdm(range(epochs))
@@ -220,12 +222,6 @@ if __name__ == "__main__":
                     pbar.set_description(
                         f"Epoch {epoch+1}, Step {i+1}, Loss: {loss.item():.4f}, Learning rate: {scheduler.get_last_lr()[0]:.7f}"
                     )
-                    # print(f'Epoch [{epoch+1}/{epochs}], Step [{i+1} * {batch_size}/{len(train_dataset)}], Loss: {loss.item():.4f}')
-                    # display loss, learning rate, steps and epoch
-
-                    # tqdm.write(
-                    #     f"Epoch [{epoch+1}/{epochs}], Step [{(i+1) * batch_size}/{len(train_dataset)}], Loss: {loss.item():.4f}, Learning rate: {scheduler.get_last_lr()[0]:.7f}"
-                    # )
 
         print("Evaluating the model")
 
@@ -239,6 +235,8 @@ if __name__ == "__main__":
                 outputs = model(
                     pixel_values=images["pixel_values"], labels=labels["labels"]
                 )
+            # add validation loss to wandb
+            wandb.log({"val_loss": outputs.loss.item()})
             # _, predicted = torch.max(outputs.logits.data, 1)
             tmp_eval_accuracy = torch.sum(torch.argmax(outputs.logits, dim=1) == labels["labels"]) / labels["labels"].size(0)
             
@@ -250,11 +248,11 @@ if __name__ == "__main__":
         )
 
         # save the model after each epoch
-        torch.save(model.state_dict(), "models/vit_cifar100_epoch_{}.pth".format(epoch + 1))
+        torch.save(model.state_dict(), "{}/vit_cifar100_epoch_{}.pth".format(dir_name, epoch + 1))
         # wandb.save("vit_cifar100_epoch_{}.pth".format(epoch + 1))
         wandb.log({"accuracy": 100 * correct / total})
 
     # save the model
-    torch.save(model.state_dict(), "models/vit_cifar100.pth")
-    wandb.save("vit_cifar100.pth")
+    torch.save(model.state_dict(), "{}/vit_cifar100.pth".format(dir_name))
+    # wandb.save("vit_cifar100.pth")
     wandb.finish()
