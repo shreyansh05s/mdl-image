@@ -35,26 +35,31 @@ models = {
         "class": ViTForImageClassification,
         "config": ViTConfig,
         "pretrained": "google/vit-base-patch16-224-in21k",
+        "freeze": False,
     },
     "cvt": {
         "class": CvtForImageClassification,
         "config": CvtConfig,
         "pretrained": "microsoft/cvt-21-384-22k",
+        "freeze": False,
     },
     "swin": {
         "class": Swinv2ForImageClassification,
         "config": Swinv2Config,
         "pretrained": "microsoft/swinv2-large-patch4-window12-192-22k",
+        "freeze": False
     },
     "vit_hybrid": {
         "class": ViTHybridForImageClassification,
         "config": ViTHybridConfig,
-        "pretrained": "google/vit-hybrid-base-bit-384"
+        "pretrained": "google/vit-hybrid-base-bit-384",
+        "freeze": False
     },
     "vit_msn": {
         "class": ViTMSNForImageClassification,
         "config": ViTMSNConfig,
-        "pretrained": "facebook/vit-msn-small"
+        "pretrained": "facebook/vit-msn-small",
+        "freeze": True
     }
 }
 
@@ -89,6 +94,13 @@ class ImageClassifier(nn.Module):
             config=config,
             ignore_mismatched_sizes=True,
         )
+        
+        # freeze the model except the last layer
+        if models[args.model]["freeze"]:
+            for param in self.model.parameters():
+                param.requires_grad = False
+            for param in self.model.classifier.parameters():
+                param.requires_grad = True
 
         print("Model initialized")
         print(
