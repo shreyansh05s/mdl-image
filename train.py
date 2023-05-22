@@ -47,7 +47,7 @@ models = {
         "class": Swinv2ForImageClassification,
         "config": Swinv2Config,
         "pretrained": "microsoft/swinv2-large-patch4-window12-192-22k",
-        "freeze": False
+        "freeze": True
     },
     "vit_hybrid": {
         "class": ViTHybridForImageClassification,
@@ -160,6 +160,10 @@ if __name__ == "__main__":
     parser.add_argument("--optimizer", type=str, default="sam")
     parser.add_argument("--train", type=bool, default=True)
     parser.add_argument("--model", type=str, default="vit")
+    parser.add_argument("--freeze", type=bool, default=False)
+    
+    # keeping to default values for now
+    args.freeze = models[args.model]["freeze"]
 
     args = parser.parse_args()
 
