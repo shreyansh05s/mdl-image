@@ -13,7 +13,9 @@ from transformers import (
     Swinv2Config,
     ViTHybridForImageClassification,
     ViTHybridConfig,
-    ViTHybridImageProcessor
+    ViTHybridImageProcessor,
+    ViTMSNForImageClassification,
+    ViTMSNConfig,
 )
 import torch
 import torchvision.transforms as transforms
@@ -48,6 +50,11 @@ models = {
         "class": ViTHybridForImageClassification,
         "config": ViTHybridConfig,
         "pretrained": "google/vit-hybrid-base-bit-384"
+    },
+    "vit_msn": {
+        "class": ViTMSNForImageClassification,
+        "config": ViTMSNConfig,
+        "pretrained": "facebook/vit-msn-small"
     }
 }
 
