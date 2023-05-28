@@ -1,0 +1,102 @@
+\begin{thebibliography}{17}
+\providecommand{\natexlab}[1]{#1}
+\providecommand{\url}[1]{\texttt{#1}}
+\expandafter\ifx\csname urlstyle\endcsname\relax
+  \providecommand{\doi}[1]{doi: #1}\else
+  \providecommand{\doi}{doi: \begingroup \urlstyle{rm}\Url}\fi
+
+\bibitem[pap()]{paperswithcode}
+{SOTA models: Their papers, code and history of usage}.
+\newblock \url{https://paperswithcode.com}.
+\newblock Accessed: 2023-04-22.
+
+\bibitem[pyt()]{pytorch-cifar-model}
+{Pytorch hub pretrained CIFAR models}.
+\newblock \url{https://github.com/chenyaofo/pytorch-cifar-models/tree/master}.
+\newblock Accessed: 2023-04-22.
+
+\bibitem[Ahmed9275()]{vit-pretrained}
+Ahmed9275.
+\newblock {VIT - finetuned model for CIFAR-100. Pretrained on Imagenet 21K}.
+\newblock \url{https://huggingface.co/Ahmed9275/Vit-Cifar100}.
+\newblock Accessed: 2023-04-22.
+
+\bibitem[Biewald(2020)]{wandb}
+Biewald, L.
+\newblock Experiment tracking with weights and biases, 2020.
+\newblock URL \url{https://www.wandb.com/}.
+\newblock Software available from wandb.com.
+
+\bibitem[Deng et~al.(2009)Deng, Dong, Socher, Li, Li, and Fei-Fei]{deng2009imagenet}
+Deng, J., Dong, W., Socher, R., Li, L.-J., Li, K., and Fei-Fei, L.
+\newblock Imagenet: A large-scale hierarchical image database.
+\newblock In \emph{2009 IEEE conference on computer vision and pattern recognition}, pp.\  248--255. Ieee, 2009.
+
+\bibitem[Dosovitskiy et~al.(2020)Dosovitskiy, Beyer, Kolesnikov, Weissenborn, Zhai, Unterthiner, Dehghani, Minderer, Heigold, Gelly, Uszkoreit, and Houlsby]{DBLP:journals/corr/abs-2010-11929}
+Dosovitskiy, A., Beyer, L., Kolesnikov, A., Weissenborn, D., Zhai, X., Unterthiner, T., Dehghani, M., Minderer, M., Heigold, G., Gelly, S., Uszkoreit, J., and Houlsby, N.
+\newblock An image is worth 16x16 words: Transformers for image recognition at scale.
+\newblock \emph{CoRR}, abs/2010.11929, 2020.
+\newblock URL \url{https://arxiv.org/abs/2010.11929}.
+
+\bibitem[Foret et~al.(2020)Foret, Kleiner, Mobahi, and Neyshabur]{DBLP:journals/corr/abs-2010-01412}
+Foret, P., Kleiner, A., Mobahi, H., and Neyshabur, B.
+\newblock Sharpness-aware minimization for efficiently improving generalization.
+\newblock \emph{CoRR}, abs/2010.01412, 2020.
+\newblock URL \url{https://arxiv.org/abs/2010.01412}.
+
+\bibitem[He et~al.(2016)He, Zhang, Ren, and Sun]{he2016deep}
+He, K., Zhang, X., Ren, S., and Sun, J.
+\newblock Deep residual learning for image recognition.
+\newblock In \emph{Proceedings of the IEEE conference on computer vision and pattern recognition}, pp.\  770--778, 2016.
+
+\bibitem[Huggingface()]{cifar-100-leaderboard}
+Huggingface.
+\newblock {Huggingface Leaderboard for CIFAR-100 models}.
+\newblock \url{https://huggingface.co/spaces/autoevaluate/leaderboards?dataset=cifar100&only_verified=0&task=-any-&config=-unspecified-&split=-unspecified-&metric=accuracy}.
+\newblock Accessed: 2023-04-22.
+
+\bibitem[Kingma \& Ba(2014)Kingma and Ba]{Kingma2014AdamAM}
+Kingma, D.~P. and Ba, J.
+\newblock Adam: A method for stochastic optimization.
+\newblock \emph{CoRR}, abs/1412.6980, 2014.
+
+\bibitem[Krizhevsky(2009)]{Krizhevsky09learningmultiple}
+Krizhevsky, A.
+\newblock Learning multiple layers of features from tiny images.
+\newblock Technical report, 2009.
+
+\bibitem[Kwon et~al.(2021)Kwon, Kim, Park, and Choi]{DBLP:journals/corr/abs-2102-11600}
+Kwon, J., Kim, J., Park, H., and Choi, I.~K.
+\newblock {ASAM:} adaptive sharpness-aware minimization for scale-invariant learning of deep neural networks.
+\newblock \emph{CoRR}, abs/2102.11600, 2021.
+\newblock URL \url{https://arxiv.org/abs/2102.11600}.
+
+\bibitem[Liu et~al.(2021)Liu, Lin, Cao, Hu, Wei, Zhang, Lin, and Guo]{DBLP:journals/corr/abs-2103-14030}
+Liu, Z., Lin, Y., Cao, Y., Hu, H., Wei, Y., Zhang, Z., Lin, S., and Guo, B.
+\newblock Swin transformer: Hierarchical vision transformer using shifted windows.
+\newblock \emph{CoRR}, abs/2103.14030, 2021.
+\newblock URL \url{https://arxiv.org/abs/2103.14030}.
+
+\bibitem[MazenAmria()]{swin-pretrained}
+MazenAmria.
+\newblock {SWIN - finetuned model for CIFAR-100. Pretrained on Imagenet 1K}.
+\newblock \url{https://huggingface.co/MazenAmria/swin-small-finetuned-cifar100}.
+\newblock Accessed: 2023-04-22.
+
+\bibitem[Paszke et~al.(2019)Paszke, Gross, Massa, Lerer, Bradbury, Chanan, Killeen, Lin, Gimelshein, Antiga, Desmaison, Kopf, Yang, DeVito, Raison, Tejani, Chilamkurthy, Steiner, Fang, Bai, and Chintala]{NEURIPS2019_9015}
+Paszke, A., Gross, S., Massa, F., Lerer, A., Bradbury, J., Chanan, G., Killeen, T., Lin, Z., Gimelshein, N., Antiga, L., Desmaison, A., Kopf, A., Yang, E., DeVito, Z., Raison, M., Tejani, A., Chilamkurthy, S., Steiner, B., Fang, L., Bai, J., and Chintala, S.
+\newblock Pytorch: An imperative style, high-performance deep learning library.
+\newblock In \emph{Advances in Neural Information Processing Systems 32}, pp.\  8024--8035. Curran Associates, Inc., 2019.
+\newblock URL \url{http://papers.neurips.cc/paper/9015-pytorch-an-imperative-style-high-performance-deep-learning-library.pdf}.
+
+\bibitem[Wolf et~al.(2020)Wolf, Debut, Sanh, Chaumond, Delangue, Moi, Cistac, Rault, Louf, Funtowicz, Davison, Shleifer, von Platen, Ma, Jernite, Plu, Xu, Scao, Gugger, Drame, Lhoest, and Rush]{wolf-etal-2020-transformers}
+Wolf, T., Debut, L., Sanh, V., Chaumond, J., Delangue, C., Moi, A., Cistac, P., Rault, T., Louf, R., Funtowicz, M., Davison, J., Shleifer, S., von Platen, P., Ma, C., Jernite, Y., Plu, J., Xu, C., Scao, T.~L., Gugger, S., Drame, M., Lhoest, Q., and Rush, A.~M.
+\newblock Transformers: State-of-the-art natural language processing.
+\newblock In \emph{Proceedings of the 2020 Conference on Empirical Methods in Natural Language Processing: System Demonstrations}, pp.\  38--45, Online, October 2020. Association for Computational Linguistics.
+\newblock URL \url{https://www.aclweb.org/anthology/2020.emnlp-demos.6}.
+
+\bibitem[Wu et~al.(2020)Wu, Xu, Dai, Wan, Zhang, Yan, Tomizuka, Gonzalez, Keutzer, and Vajda]{wu2020visual}
+Wu, B., Xu, C., Dai, X., Wan, A., Zhang, P., Yan, Z., Tomizuka, M., Gonzalez, J., Keutzer, K., and Vajda, P.
+\newblock Visual transformers: Token-based image representation and processing for computer vision, 2020.
+
+\end{thebibliography}
