@@ -12,9 +12,18 @@ from transformers import (
     AutoFeatureExtractor,
     AlignModel,
     AlignProcessor,
+    ViTForImageClassification,
+    ViTConfig,
+    Swinv2ForImageClassification,
+    Swinv2Config,
+    AutoImageProcessor,
 )
 import argparse
 import json
+import os
+from model import ImageClassifier
+from functools import partial
+
 
 device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 
@@ -29,8 +38,8 @@ def transform_image(image):
 
 
 def transform_image_ALIGN(image):
-    image = extractor(images=image, text=cifar100_classes, return_tensors="pt")
-    # image = {k: v.squeeze() for k, v in image.items()}
+    image = extractor(images=image, return_tensors="pt")
+    image = {k: v.squeeze() for k, v in image.items()}
     return image
 
 
@@ -51,11 +60,37 @@ models = {
         ),
         "transform_image": transform_image,
     },
+    "VIT-ASAM": {
+        "model": {
+            "class": ViTForImageClassification,
+            "pretrained": "google/vit-base-patch16-224-in21k",
+            "freeze": False,
+        },
+        "config": ViTConfig,
+        "extractor": AutoImageProcessor.from_pretrained(
+            "google/vit-base-patch16-224-in21k"
+        ),
+        "transform_image": transform_image,
+        "model_dir": os.path.join("models", "vit", "effortless-wildflower-54", "vit_cifar100.pth"),
+    },
+    "SWIN-ASAM": {
+        "model": {
+            "class": Swinv2ForImageClassification,
+            "pretrained": "microsoft/swinv2-large-patch4-window12-192-22k",
+            "freeze": True,
+        },
+        "config": Swinv2Config,
+        "extractor": AutoImageProcessor.from_pretrained(
+            "microsoft/swinv2-large-patch4-window12-192-22k"
+        ),
+        "transform_image": transform_image,
+        "model_dir": os.path.join("models", "swin","denim-cosmos-61", "swin_cifar100.pth"),
+    },
+    # will not be used in the paper
     "ALIGN": {
         "model": AlignModel.from_pretrained("kakaobrain/align-base"),
         "extractor": AlignProcessor.from_pretrained("kakaobrain/align-base"),
         "transform_image": transform_image_ALIGN,
-        "batch_size": None,
     },
 }
 
@@ -94,6 +129,19 @@ if __name__ == "__main__":
 
     args = parse_args()
     model = models[args.model]["model"]
+
+    if "model_dir" in models[args.model]:
+        config = models[args.model]["config"].from_pretrained(models[args.model]["model"]["pretrained"])
+        config.num_labels = 100
+        model = ImageClassifier(
+            num_classes=100, model=models[args.model]["model"], config=config
+        )
+        # model.load_state_dict(torch.load(models[args.model]))
+        # # above line fails with:
+        # # AttributeError: 'dict' object has no attribute 'seek'. You can only torch.load from a file that is seekable. Please pre-load the data into a buffer like io.BytesIO and try to load from it instead.
+        # # to fix thie we can do this instead
+        model.load_state_dict(torch.load(models[args.model]["model_dir"]))
+
     extractor = models[args.model]["extractor"]
     transform_image = (
         models[args.model]["transform_image"]
@@ -105,6 +153,10 @@ if __name__ == "__main__":
         if "batch_size" in models[args.model]
         else default_batch_size
     )
+
+    if args.model == "ALIGN":
+        classes_processed = extractor(text=cifar100_classes, return_tensors="pt")
+        # classes_processed.to(device)
 
     model.to(device)
     model.eval()
@@ -119,11 +171,9 @@ if __name__ == "__main__":
     eval_accuracy = 0
     nb_eval_steps = 0
     for batch in tqdm(dataset):
-        # print(type(batch[0]))
-        # print(batch)
-
         if type(batch[0]) == dict:
-            b_input_ids = {k: v.to(device) for k, v in batch[0].items()}
+            b_input_ids = batch[0]
+            b_input_ids["pixel_values"] = b_input_ids["pixel_values"].to(device)
 
         else:
             b_input_ids = batch[0].to(device)
@@ -133,9 +183,21 @@ if __name__ == "__main__":
         else:
             b_labels = batch[1].to(device)
 
+        if args.model == "ALIGN":
+            classes_processed.to(device)
+            b_input_ids.update(classes_processed)
+
+        # print(b_input_ids)
+        # print(b_input_ids.keys())
+        # print(b_input_ids["input_ids"].shape)
+        # print(b_input_ids["attention_mask"].shape)
+        # print(b_input_ids["token_type_ids"].shape)
+        # print(b_input_ids["pixel_values"].shape)
+
         with torch.no_grad():
             outputs = model(**b_input_ids)
 
+        # print(outputs.keys())
         # print(outputs)
         try:
             logits = outputs.logits
@@ -149,9 +211,9 @@ if __name__ == "__main__":
             b_labels
         )
 
-        tqdm.write("Accuracy: {}".format(tmp_eval_accuracy))
-
         eval_accuracy += tmp_eval_accuracy
         nb_eval_steps += 1
+        if nb_eval_steps % 100 == 0:
+            tqdm.write("Accuracy: {}".format(eval_accuracy / nb_eval_steps))
 
     print("Accuracy: {}".format(eval_accuracy / nb_eval_steps))

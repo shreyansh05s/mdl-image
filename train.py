@@ -27,6 +27,7 @@ import wandb
 from sam import SAM
 import argparse
 import os
+from model import ImageClassifier
 
 device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 
@@ -92,33 +93,6 @@ def label_transform_function(label):
     return {"labels": torch.tensor(label)}
 
 
-class ImageClassifier(nn.Module):
-    def __init__(self, num_classes, args):
-        super(ImageClassifier, self).__init__()
-        self.model = models[args.model]["class"].from_pretrained(
-            models[args.model]["pretrained"],
-            config=config,
-            ignore_mismatched_sizes=True,
-        )
-
-        # freeze the model except the last layer
-        if models[args.model]["freeze"]:
-            for param in self.model.parameters():
-                param.requires_grad = False
-            for param in self.model.classifier.parameters():
-                param.requires_grad = True
-
-        print("Model initialized")
-        print(
-            "Number of trainable parameters: ",
-            sum(p.numel() for p in self.model.parameters() if p.requires_grad),
-        )
-
-    def forward(self, **out):
-        outputs = self.model(**out)
-        return outputs
-
-
 # function to select the optimizer
 def get_optimizer(method="adam", lr=2e-4, **kargs):
     if method == "adam":
@@ -172,13 +146,16 @@ if __name__ == "__main__":
     # keeping to default values for now
     args.freeze = models[args.model]["freeze"]
 
-    wandb.init(project="vit-cifar100")
+    #### change the run name later
+    wandb.init(project="vit-cifar100", entity="leiden-catch-rl")
+    # wandb set run name
+    wandb.run.name = args.model
     wandb.config.update(args)
 
     # get run name from wandb
     run_name = wandb.run.name
 
-    model_dir = os.path.join("models", args.model, run_name)
+    model_dir = os.path.join("models", args.model)
 
     # create a directory with the run name to save the model
     os.makedirs(model_dir, exist_ok=True)
@@ -207,7 +184,7 @@ if __name__ == "__main__":
         image_processor = AutoImageProcessor.from_pretrained(
             models[args.model]["pretrained"]
         )
-    model = models[args.model]["processor"] = image_processor
+    models[args.model]["processor"] = image_processor
 
     transform_image = TransformImage(image_processor=image_processor)
 
@@ -245,7 +222,8 @@ if __name__ == "__main__":
     )
     config.num_labels = 100
 
-    model = ImageClassifier(100, args)
+    # define the model
+    model = ImageClassifier(100, models[args.model], config)
     model.to(device)
 
     epochs = args.epochs
