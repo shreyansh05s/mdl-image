@@ -47,20 +47,26 @@ models = {
         "class": Swinv2ForImageClassification,
         "config": Swinv2Config,
         "pretrained": "microsoft/swinv2-large-patch4-window12-192-22k",
-        "freeze": True
+        "freeze": True,
+    },
+    "swin_adam_pretrained": {
+        "class": Swinv2ForImageClassification,
+        "config": Swinv2Config,
+        "pretrained": "MazenAmria/swin-tiny-finetuned-cifar100",
+        "freeze": True,
     },
     "vit_hybrid": {
         "class": ViTHybridForImageClassification,
         "config": ViTHybridConfig,
         "pretrained": "google/vit-hybrid-base-bit-384",
-        "freeze": False
+        "freeze": False,
     },
     "vit_msn": {
         "class": ViTMSNForImageClassification,
         "config": ViTMSNConfig,
         "pretrained": "facebook/vit-msn-small",
-        "freeze": True
-    }
+        "freeze": True,
+    },
 }
 
 # fix seed for reproducibility
@@ -94,7 +100,7 @@ class ImageClassifier(nn.Module):
             config=config,
             ignore_mismatched_sizes=True,
         )
-        
+
         # freeze the model except the last layer
         if models[args.model]["freeze"]:
             for param in self.model.parameters():
@@ -113,7 +119,7 @@ class ImageClassifier(nn.Module):
         return outputs
 
 
-# funtction to select the optimizer
+# function to select the optimizer
 def get_optimizer(method="adam", lr=2e-4, **kargs):
     if method == "adam":
         optimizer = torch.optim.Adam(model.parameters(), lr=lr)
@@ -152,7 +158,6 @@ if __name__ == "__main__":
     parser.add_argument("--epochs", type=int, default=5)
     parser.add_argument("--batch_size", type=int, default=8)
     parser.add_argument("--lr", type=float, default=0.01)
-    # parser.add_argument("--weight_decay", type=float, default=1e-4)
     parser.add_argument("--momentum", type=float, default=0.9)
     parser.add_argument("--scheduler", type=str, default="step")
     parser.add_argument("--gamma", type=float, default=0.95)
@@ -161,11 +166,11 @@ if __name__ == "__main__":
     parser.add_argument("--train", type=bool, default=True)
     parser.add_argument("--model", type=str, default="vit")
     parser.add_argument("--freeze", type=bool, default=False)
-    
-    # keeping to default values for now
-    args.freeze = models[args.model]["freeze"]
 
     args = parser.parse_args()
+
+    # keeping to default values for now
+    args.freeze = models[args.model]["freeze"]
 
     wandb.init(project="vit-cifar100")
     wandb.config.update(args)
@@ -176,9 +181,7 @@ if __name__ == "__main__":
     model_dir = os.path.join("models", args.model, run_name)
 
     # create a directory with the run name to save the model
-    os.mkdir(model_dir)
-
-    dir_name = model_dir
+    os.makedirs(model_dir, exist_ok=True)
 
     mp.set_start_method("spawn", force=True)
 
@@ -210,6 +213,7 @@ if __name__ == "__main__":
 
     transform_processor = transforms.Compose([transform_image])
 
+    # load the dataset
     train_dataset = CIFAR100(
         root="./data",
         train=True,
@@ -326,11 +330,11 @@ if __name__ == "__main__":
         # save the model after each epoch
         torch.save(
             model.state_dict(),
-            "{}/{}_cifar100_epoch_{}.pth".format(dir_name, args.model, epoch + 1),
+            "{}/{}_cifar100_epoch_{}.pth".format(model_dir, args.model, epoch + 1),
         )
         wandb.log({"accuracy": 100 * correct / total})
 
     # save the model
-    torch.save(model.state_dict(), "{}/{}_cifar100.pth".format(dir_name, args.model))
+    torch.save(model.state_dict(), "{}/{}_cifar100.pth".format(model_dir, args.model))
     # wandb.save("vit_cifar100.pth")
     wandb.finish()
