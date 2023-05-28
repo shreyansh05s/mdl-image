@@ -1,16 +1,16 @@
 # Fdb version 4
-["bibtex main"] 1685297353 "main.aux" "main.bbl" "main" 1685297517 0
+["bibtex main"] 1685297889 "main.aux" "main.bbl" "main" 1685297917 0
   "./icml2021.bst" 1685292481 27147 754d35bad1e0551f1b55824eb3875247 ""
-  "./main.bib" 1685292481 7566 3910411071a6bbfc6f1551253d8677db ""
-  "main.aux" 1685297516 4042 ac4e9eb10486957834d8dc8b5667a235 "pdflatex"
+  "./main.bib" 1685297888 7749 4055554df43cd3cf1e0a513dd066c9ce ""
+  "main.aux" 1685297916 4042 ac4e9eb10486957834d8dc8b5667a235 "pdflatex"
   (generated)
   "main.bbl"
   "main.blg"
   (rewritten before read)
-["pdflatex"] 1685297513 "c:/Users/shrey/Desktop/uni/seminar_multi/mdl-image/report/main.tex" "main.pdf" "main" 1685297517 0
+["pdflatex"] 1685297912 "c:/Users/shrey/Desktop/uni/seminar_multi/mdl-image/report/main.tex" "main.pdf" "main" 1685297917 0
   "algorithm.sty" 1685292481 2223 ada3eaa0c1bd465a639433dfafc2fc4e ""
   "algorithmic.sty" 1685292481 7414 ce084815cf0aab483787dbc4bf2ace9c ""
-  "c:/Users/shrey/Desktop/uni/seminar_multi/mdl-image/report/main.tex" 1685297512 26262 b9248fa52d5efdce7fd29e019c0ea907 ""
+  "c:/Users/shrey/Desktop/uni/seminar_multi/mdl-image/report/main.tex" 1685297911 26527 c61de96d07b286cc3f35007883d37196 ""
   "c:/texlive/2023/texmf-dist/fonts/enc/dvips/base/8r.enc" 1685287154 4850 80dc9bab7f31fb78a000ccfed0e27cab ""
   "c:/texlive/2023/texmf-dist/fonts/map/fontname/texfonts.map" 1685287396 3524 cb3e574dea2d1052e39280babc910dc8 ""
   "c:/texlive/2023/texmf-dist/fonts/tfm/adobe/courier/pcrr7t.tfm" 1685286975 960 379cc0019370a9e0208a0a3f949f847a ""
@@ -125,10 +125,10 @@
   "fancyhdr.sty" 1685292481 20521 e5d13d98d57bd53d4fed3aa61bd29c86 ""
   "icml2021.sty" 1685292481 27174 ab30649a6169102389fe194b6304d846 ""
   "learning_rate_schedulers.png" 1685292481 933994 9b3a28afca69ef00f60f12ec67e60002 ""
-  "main.aux" 1685297516 4042 ac4e9eb10486957834d8dc8b5667a235 "pdflatex"
-  "main.bbl" 1685297353 6144 a9a827a03ea781eeba665c5350ab7ca1 "bibtex main"
-  "main.out" 1685297514 0 d41d8cd98f00b204e9800998ecf8427e "pdflatex"
-  "main.tex" 1685297512 26262 b9248fa52d5efdce7fd29e019c0ea907 ""
+  "main.aux" 1685297916 4042 ac4e9eb10486957834d8dc8b5667a235 "pdflatex"
+  "main.bbl" 1685297889 6144 a9a827a03ea781eeba665c5350ab7ca1 "bibtex main"
+  "main.out" 1685297913 0 d41d8cd98f00b204e9800998ecf8427e "pdflatex"
+  "main.tex" 1685297911 26527 c61de96d07b286cc3f35007883d37196 ""
   "optimizers.png" 1685292481 524383 00e83277b796723a3c40d3c9cdfd04c6 ""
   "swin.png" 1685292481 563173 23ca58d2a7760b7e03ccb8e897976d23 ""
   "test_accuracy.png" 1685292481 265566 bfcb0410e6acea2ad761cf8ee094a1f7 ""
