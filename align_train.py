@@ -11,7 +11,7 @@ device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 
 processor = AlignProcessor.from_pretrained("kakaobrain/align-base")
 model = AlignModel.from_pretrained("kakaobrain/align-base")
-
+model
 model.to(device)
 model.eval()
 
@@ -38,6 +38,7 @@ test_dataloader = DataLoader(
 )
 
 
+print(classes_processed)
 eval_accuracy = 0
 steps = 1
 for data in tqdm(test_dataloader):
@@ -63,7 +64,7 @@ for data in tqdm(test_dataloader):
         tqdm.write(f"Accuracy: {eval_accuracy / steps}")
     steps += 1
 
-print(eval_accuracy / len(steps))
+print(eval_accuracy / len(test_dataset))
 
 
 print("predicted class:", classes[torch.argmax(probs).item()])
