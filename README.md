@@ -8,6 +8,13 @@
   - [Installation](#installation)
   - [Training](#training)
   - [Evaluation](#evaluation)
+  - [Hyperparameter Tuning](#hyperparameter-tuning)
+  - [Experiments](#experiments)
+    - [VIT](#vit)
+    - [VIT-COSINE](#vit-cosine)
+    - [VIT-ASAM](#vit-asam)
+    - [SWIN-ASAM](#swin-asam)
+  - [Benchmarking](#benchmarking)
 
 ## Overview
 
@@ -99,6 +106,103 @@ For Evaluation on all models, we can run the following:
 python eval.py
 ```
 
+## Hyperparameter Tuning
 
+Hyperparameter tuning was done manually by running variations of arguments in the `train.py` script. The best performing hyperparameters were then used for the experiments.
 
+Default hyperparameters can be found in the `train.py` script. And can be seen in the table below:
 
+| Hyperparameter | Default Value |
+| -------------- | ------------- |
+| batch_size     | 32            |
+| epochs         | 5             |
+| lr             | 0.01          |
+| optimizer      | sam           |
+| scheduler      | step          |
+| gamma          | 0.95          |
+| momentum       | 0.9           |
+| step_size      | 100           |
+
+## Experiments
+
+In this section, we will highlight steps to reproduce the experiments in the paper. Run all commands below:
+
+### VIT
+
+To train a ViT model on CIFAR100, we can run the following:
+
+```bash
+python train.py --model vit --batch-size 32 --epochs 5 --lr 0.01 --optimizer adam --scheduler step
+```
+
+### VIT-COSINE
+
+To train a ViT model with cosine decay on CIFAR100, we can run the following:
+
+```bash
+python train.py --model vit --batch-size 32 --epochs 5 --lr 0.01 --optimizer adam --scheduler cosine
+```
+
+### VIT-ASAM
+
+To train a ViT model with SAM optimizer on CIFAR100, we can run the following:
+
+```bash
+python train.py --model vit --batch-size 32 --epochs 5 --lr 0.01 --optimizer sam
+```
+
+### SWIN-ASAM
+
+To train a Swin Transformer model with SAM optimizer on CIFAR100, we can run the following:
+
+```bash
+python train.py --model swin --batch-size 32 --epochs 5 --lr 0.01 --optimizer sam
+```
+
+## Benchmarking
+
+To benchmark all models on CIFAR100, we can run the following:
+
+```bash
+python eval.py
+```
+
+## Notes
+
+- The batch size utilized for experiments is 32. Depending on your GPU memory, you may need to adjust this value.
+
+<!-- cite sam.py -->
+## References
+
+```bibtex
+@misc{foret2021sharpnessaware,
+      title={Sharpness-Aware Minimization for Efficiently Improving Generalization}, 
+      author={Pierre Foret and Ariel Kleiner and Hossein Mobahi and Behnam Neyshabur},
+      year={2021},
+      eprint={2010.01412},
+      archivePrefix={arXiv},
+      primaryClass={cs.LG}
+}
+```
+
+```bibtex
+@misc{liu2021swin,
+      title={Swin Transformer: Hierarchical Vision Transformer using Shifted Windows}, 
+      author={Ze Liu and Yutong Lin and Yue Cao and Han Hu and Yixuan Wei and Zheng Zhang and Stephen Lin and Baining Guo},
+      year={2021},
+      eprint={2103.14030},
+      archivePrefix={arXiv},
+      primaryClass={cs.CV}
+}
+```
+
+```bibtex
+@misc{dosovitskiy2020image,
+      title={An Image is Worth 16x16 Words: Transformers for Image Recognition at Scale}, 
+      author={Alexey Dosovitskiy and Lucas Beyer and Alexander Kolesnikov and Dirk Weissenborn and Xiaohua Zhai and Thomas Unterthiner and Mostafa Dehghani and Matthias Minderer and Georg Heigold and Sylvain Gelly and Jakob Uszkoreit and Neil Houlsby},
+      year={2020},
+      eprint={2010.11929},
+      archivePrefix={arXiv},
+      primaryClass={cs.CV}
+}
+```
