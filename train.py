@@ -31,6 +31,7 @@ from model import ImageClassifier
 
 device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 
+# default models and their configurations for experiments
 models = {
     "vit": {
         "class": ViTForImageClassification,
@@ -97,8 +98,6 @@ def label_transform_function(label):
 def get_optimizer(method="adam", lr=2e-4, **kargs):
     if method == "adam":
         optimizer = torch.optim.Adam(model.parameters(), lr=lr)
-    # elif method == "LION":
-    #     optimizer = Lion(model.parameters(), lr=lr, weight_decay=1e-2)
     elif method == "sam":
         base_optimizer = (
             torch.optim.SGD
@@ -149,7 +148,7 @@ if __name__ == "__main__":
     # keeping to default values for now
     args.freeze = models[args.model]["freeze"]
 
-    if args.use_wandb:    
+    if args.use_wandb:
         wandb.init(project=args.wandb_project, entity=args.wandb_entity)
         # wandb set run name
         wandb.run.name = args.model
@@ -309,6 +308,6 @@ if __name__ == "__main__":
 
     # save the model
     torch.save(model.state_dict(), "{}/{}_cifar100.pth".format(model_dir, args.model))
-    
+
     if args.use_wandb:
         wandb.finish()
