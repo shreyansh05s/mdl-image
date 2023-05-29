@@ -6,3 +6,6 @@ poillow
 requests
 scikit-learn
 torchvision
+pandas
+tqdm
+torchvision

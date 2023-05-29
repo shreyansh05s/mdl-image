@@ -24,12 +24,23 @@ import os
 from model import ImageClassifier
 from functools import partial
 from torchvision import transforms
+import pandas as pd
 
 
 device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 
 with open("cifar100_classes.json", "r") as f:
     cifar100_classes = json.load(f)
+
+
+class TransformImage:
+    def __init__(self, image_processor):
+        self.image_processor = image_processor
+
+    def __call__(self, image):
+        image = self.image_processor(image, return_tensors="pt")
+        image["pixel_values"] = image["pixel_values"].squeeze()
+        return image
 
 
 def transform_image(image):
@@ -61,7 +72,9 @@ models = {
             "Ahmed9275/Vit-Cifar100"
         ),
         "extractor": ViTImageProcessor.from_pretrained("Ahmed9275/Vit-Cifar100"),
-        "transform_image": transform_image,
+        "transform_image": TransformImage(
+            ViTImageProcessor.from_pretrained("Ahmed9275/Vit-Cifar100")
+        ),
     },
     "SWIN": {
         "model": AutoModelForImageClassification.from_pretrained(
@@ -70,7 +83,11 @@ models = {
         "extractor": ViTImageProcessor.from_pretrained(
             "MazenAmria/swin-small-finetuned-cifar100"
         ),
-        "transform_image": transform_image,
+        "transform_image": TransformImage(
+            ViTImageProcessor.from_pretrained(
+                "MazenAmria/swin-small-finetuned-cifar100"
+            )
+        ),
     },
     "VIT-ASAM": {
         "model": {
@@ -82,7 +99,9 @@ models = {
         "extractor": AutoImageProcessor.from_pretrained(
             "google/vit-base-patch16-224-in21k"
         ),
-        "transform_image": transform_image,
+        "transform_image": TransformImage(
+            AutoImageProcessor.from_pretrained("google/vit-base-patch16-224-in21k")
+        ),
         "model_dir": os.path.join(
             "models", "vit", "effortless-wildflower-54", "vit_cifar100.pth"
         ),
@@ -97,7 +116,11 @@ models = {
         "extractor": AutoImageProcessor.from_pretrained(
             "microsoft/swinv2-large-patch4-window12-192-22k"
         ),
-        "transform_image": transform_image,
+        "transform_image": TransformImage(
+            AutoImageProcessor.from_pretrained(
+                "microsoft/swinv2-large-patch4-window12-192-22k"
+            ),
+        ),
         "model_dir": os.path.join(
             "models", "swin", "denim-cosmos-61", "swin_cifar100.pth"
         ),
@@ -126,7 +149,11 @@ def get_dataset(transform_image=None, batch_size=16):
         test_dataloader = None
     else:
         test_dataloader = DataLoader(
-            test_dataset, batch_size=batch_size, shuffle=True, num_workers=4, pin_memory=True
+            test_dataset,
+            batch_size=batch_size,
+            shuffle=True,
+            num_workers=4,
+            pin_memory=True,
         )
 
     return test_dataset, test_dataloader
@@ -134,15 +161,12 @@ def get_dataset(transform_image=None, batch_size=16):
 
 def parse_args():
     parser = argparse.ArgumentParser()
-    parser.add_argument("--model", type=str, default="VIT")
+    parser.add_argument("--model", type=str, default=None)
     args = parser.parse_args()
     return args
 
 
-if __name__ == "__main__":
-    default_batch_size = 16
-
-    args = parse_args()
+def eval(args):
     model = models[args.model]["model"]
 
     if "model_dir" in models[args.model]:
@@ -232,4 +256,24 @@ if __name__ == "__main__":
         if nb_eval_steps % 50 == 0:
             pb.set_description("Accuracy: {}".format(eval_accuracy / nb_eval_steps))
 
-    print("Model {}, accuracy: {}".format(args.model, eval_accuracy / nb_eval_steps))
+    accuracy = eval_accuracy / nb_eval_steps
+    print("Model {}, accuracy: {}".format(args.model, accuracy))
+    return accuracy
+
+
+if __name__ == "__main__":
+    default_batch_size = 16
+
+    args = parse_args()
+    if not args.model:
+        results = []
+        # eval all models
+        for model in models.keys():
+            args.model = model
+            accuracy = eval(args)
+            results.append({"model": model, "accuracy": accuracy.item()})
+        result_df = pd.DataFrame(results).sort_values(by="accuracy", ascending=False)
+        print(result_df)
+        result_df.to_json("results.json")
+    else:
+        eval(args)
