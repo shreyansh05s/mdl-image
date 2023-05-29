@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.25 (TeX Live 2023) (preloaded format=pdflatex 2023.5.28)  29 MAY 2023 18:24
+This is pdfTeX, Version 3.141592653-2.6-1.40.25 (TeX Live 2023) (preloaded format=pdflatex 2023.5.28)  29 MAY 2023 19:13
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -479,88 +479,75 @@ Underfull \vbox (badness 10000) has occurred while \output is active []
 ]
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
-
-Underfull \vbox (badness 10000) has occurred while \output is active []
-
- [2]
-<vit.png, id=36, 443.15562pt x 217.31187pt>
+<vit.png, id=19, 443.15562pt x 217.31187pt>
 File: vit.png Graphic file (type png)
 <use vit.png>
-Package pdftex.def Info: vit.png  used on input line 161.
+Package pdftex.def Info: vit.png  used on input line 164.
 (pdftex.def)             Requested size: 195.126pt x 95.68713pt.
-<swin.png, id=44, 616.3025pt x 356.83313pt>
+<swin.png, id=25, 616.3025pt x 356.83313pt>
 File: swin.png Graphic file (type png)
 <use swin.png>
-Package pdftex.def Info: swin.png  used on input line 173.
+Package pdftex.def Info: swin.png  used on input line 176.
 (pdftex.def)             Requested size: 195.126pt x 112.97473pt.
- [3
+ [2
 pdfTeX warning (ext4): destination with the same identifier (name{figure.1}) has been already used, duplicate ignored
 <argument> ...shipout:D \box_use:N \l_shipout_box 
                                                   \__shipout_drop_firstpage_...
-l.219 
-      
+l.206 \end{table}
+                  <./vit.png>]
+<optimizers.png, id=52, 2601.72pt x 1999.47pt>
+File: optimizers.png Graphic file (type png)
+<use optimizers.png>
+Package pdftex.def Info: optimizers.png  used on input line 235.
+(pdftex.def)             Requested size: 195.126pt x 149.95378pt.
+
+Underfull \hbox (badness 2020) in paragraph at lines 236--236
+[][][]\OT1/ptm/m/n/9 (+20) Comparing our se-lected hy-per-pa-ram-e-ters for VIT-
+ []
+
+[3
 pdfTeX warning (ext4): destination with the same identifier (name{figure.2}) has been already used, duplicate ignored
 <argument> ...shipout:D \box_use:N \l_shipout_box 
                                                   \__shipout_drop_firstpage_...
-l.219 
+l.248 
       
 pdfTeX warning (ext4): destination with the same identifier (name{table.1}) has been already used, duplicate ignored
 <argument> ...shipout:D \box_use:N \l_shipout_box 
                                                   \__shipout_drop_firstpage_...
-l.219 
-       <./vit.png> <./swin.png>]
-<optimizers.png, id=71, 2601.72pt x 1999.47pt>
-File: optimizers.png Graphic file (type png)
-<use optimizers.png>
-Package pdftex.def Info: optimizers.png  used on input line 227.
-(pdftex.def)             Requested size: 195.126pt x 149.95378pt.
-
-Underfull \hbox (badness 2020) in paragraph at lines 228--228
-[][][]\OT1/ptm/m/n/9 (+20) Comparing our se-lected hy-per-pa-ram-e-ters for VIT-
- []
-
-<learning_rate_schedulers.png, id=72, 2601.72pt x 1999.47pt>
-File: learning_rate_schedulers.png Graphic file (type png)
-<use learning_rate_schedulers.png>
-Package pdftex.def Info: learning_rate_schedulers.png  used on input line 257.
-(pdftex.def)             Requested size: 195.126pt x 149.95378pt.
-[4
+l.248 
+      
 pdfTeX warning (ext4): destination with the same identifier (name{figure.3}) has been already used, duplicate ignored
 <argument> ...shipout:D \box_use:N \l_shipout_box 
                                                   \__shipout_drop_firstpage_...
-l.277 
-      
+l.248 
+       <./swin.png> <./optimizers.png>]
+<learning_rate_schedulers.png, id=71, 2601.72pt x 1999.47pt>
+File: learning_rate_schedulers.png Graphic file (type png)
+<use learning_rate_schedulers.png>
+Package pdftex.def Info: learning_rate_schedulers.png  used on input line 266.
+(pdftex.def)             Requested size: 195.126pt x 149.95378pt.
+
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+<cross_entropy_loss.png, id=72, 2601.72pt x 1999.47pt>
+File: cross_entropy_loss.png Graphic file (type png)
+<use cross_entropy_loss.png>
+Package pdftex.def Info: cross_entropy_loss.png  used on input line 295.
+(pdftex.def)             Requested size: 195.126pt x 149.95378pt.
+<test_accuracy.png, id=73, 2601.72pt x 1999.47pt>
+File: test_accuracy.png Graphic file (type png)
+<use test_accuracy.png>
+Package pdftex.def Info: test_accuracy.png  used on input line 304.
+(pdftex.def)             Requested size: 195.126pt x 149.95378pt.
+
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+ [4
 pdfTeX warning (ext4): destination with the same identifier (name{figure.4}) has been already used, duplicate ignored
 <argument> ...shipout:D \box_use:N \l_shipout_box 
                                                   \__shipout_drop_firstpage_...
-l.277 
-       <./optimizers.png> <./learning_rate_schedulers.png>]
-<cross_entropy_loss.png, id=86, 2601.72pt x 1999.47pt>
-File: cross_entropy_loss.png Graphic file (type png)
-<use cross_entropy_loss.png>
-Package pdftex.def Info: cross_entropy_loss.png  used on input line 286.
-(pdftex.def)             Requested size: 195.126pt x 149.95378pt.
-<test_accuracy.png, id=87, 2601.72pt x 1999.47pt>
-File: test_accuracy.png Graphic file (type png)
-<use test_accuracy.png>
-Package pdftex.def Info: test_accuracy.png  used on input line 295.
-(pdftex.def)             Requested size: 195.126pt x 149.95378pt.
- [5
-pdfTeX warning (ext4): destination with the same identifier (name{figure.5}) has been already used, duplicate ignored
-<argument> ...shipout:D \box_use:N \l_shipout_box 
-                                                  \__shipout_drop_firstpage_...
-l.337 S
-       ince VIT-ASAM outperforms all other models, for future work we can tr...
-pdfTeX warning (ext4): destination with the same identifier (name{figure.6}) has been already used, duplicate ignored
-<argument> ...shipout:D \box_use:N \l_shipout_box 
-                                                  \__shipout_drop_firstpage_...
-l.337 S
-       ince VIT-ASAM outperforms all other models, for future work we can tr...
-pdfTeX warning (ext4): destination with the same identifier (name{table.2}) has been already used, duplicate ignored
-<argument> ...shipout:D \box_use:N \l_shipout_box 
-                                                  \__shipout_drop_firstpage_...
-l.337 S
-       ince VIT-ASAM outperforms all other models, for future work we can tr... <./cross_entropy_loss.png> <./test_accuracy.png>] (./main.bbl
+l.319 R
+       esnet pretrained model was evaluated on CIFAR-100 and it gives an acc... <./learning_rate_schedulers.png>] (./main.bbl
 LaTeX Font Info:    Trying to load font information for OT1+pcr on input line 10.
  (c:/texlive/2023/texmf-dist/tex/latex/psnfss/ot1pcr.fd
 File: ot1pcr.fd 2001/06/04 font definitions for OT1/pcr.
@@ -584,7 +571,22 @@ Underfull \hbox (badness 1596) in paragraph at lines 14--17
 \OT1/pcr/m/n/10 pytorch-[]cifar-[]models / tree / master$[][]\OT1/ptm/m/n/10 (+20) .  Ac-
  []
 
-
+[5
+pdfTeX warning (ext4): destination with the same identifier (name{figure.5}) has been already used, duplicate ignored
+<argument> ...shipout:D \box_use:N \l_shipout_box 
+                                                  \__shipout_drop_firstpage_...
+l.24 \bibitem[Biewald(2020)]{wandb}
+                                   
+pdfTeX warning (ext4): destination with the same identifier (name{figure.6}) has been already used, duplicate ignored
+<argument> ...shipout:D \box_use:N \l_shipout_box 
+                                                  \__shipout_drop_firstpage_...
+l.24 \bibitem[Biewald(2020)]{wandb}
+                                   
+pdfTeX warning (ext4): destination with the same identifier (name{table.2}) has been already used, duplicate ignored
+<argument> ...shipout:D \box_use:N \l_shipout_box 
+                                                  \__shipout_drop_firstpage_...
+l.24 \bibitem[Biewald(2020)]{wandb}
+                                    <./cross_entropy_loss.png> <./test_accuracy.png>]
 Underfull \hbox (badness 1248) in paragraph at lines 53--57
 []\OT1/ptm/m/n/10 (+20) Huggingface.  Hug-ging-face Leader-board for CIFAR-
  []
@@ -649,9 +651,7 @@ Overfull \hbox (207.42252pt too wide) in paragraph at lines 87--91
 \OT1/pcr/m/n/10 9015-[]pytorch-[]an-[]imperative-[]style-[]high-[]performance-[]deep-[]learning-[]library .
  []
 
-[6]) [7
-
-] (./main.aux)
+) [6] (./main.aux)
 
 LaTeX Warning: There were multiply-defined labels.
 
@@ -659,18 +659,18 @@ Package rerunfilecheck Info: File `main.out' has not changed.
 (rerunfilecheck)             Checksum: D41D8CD98F00B204E9800998ECF8427E;0.
  ) 
 Here is how much of TeX's memory you used:
- 13172 strings out of 476038
- 208087 string characters out of 5794173
- 1875779 words of memory out of 5000000
+ 13169 strings out of 476038
+ 208075 string characters out of 5794173
+ 1873779 words of memory out of 5000000
  33094 multiletter control sequences out of 15000+600000
- 548268 words of font info for 230 fonts, out of 8000000 for 9000
+ 548149 words of font info for 228 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
  75i,12n,76p,1059b,638s stack positions out of 10000i,1000n,20000p,200000b,200000s
 <c:/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi6.pfb><c:/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi9.pfb><c:/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmti9.pfb><c:/texlive/2023/texmf-dist/fonts/type1/urw/courier/ucrr8a.pfb><c:/texlive/2023/texmf-dist/fonts/type1/urw/times/utmb8a.pfb><c:/texlive/2023/texmf-dist/fonts/type1/urw/times/utmr8a.pfb><c:/texlive/2023/texmf-dist/fonts/type1/urw/times/utmr8a.pfb><c:/texlive/2023/texmf-dist/fonts/type1/urw/times/utmri8a.pfb>
-Output written on main.pdf (7 pages, 2006359 bytes).
+Output written on main.pdf (6 pages, 2004207 bytes).
 PDF statistics:
- 199 PDF objects out of 1000 (max. 8388607)
- 156 compressed objects within 2 object streams
+ 190 PDF objects out of 1000 (max. 8388607)
+ 148 compressed objects within 2 object streams
  53 named destinations out of 1000 (max. 500000)
  58911 words of extra memory for PDF output out of 61914 (max. 10000000)
 
