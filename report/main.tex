@@ -54,12 +54,29 @@
 \printAffiliationsAndNotice{\icmlEqualContribution} % 
 
 \begin{abstract}
-    This paper presents a comparative analysis of pretrained image classification architectures for the CIFAR-100 dataset, with a focus on finding a novel configuration that performs well within smaller budgets and datasets. The study aims to identify an optimized model and its configuration that demonstrates superior performance compared to larger benchmarks like ImageNet, while considering resource constraints. The evaluated architectures include ResNets, Vision Transformers (VIT), and Swin Transformers. Additionally, different optimization techniques such as Adam and Adaptive Sharpness-Aware Minimization (ASAM) are examined to determine their impact on convergence and accuracy. The investigation incorporates the use of cosine annealing learning rate and step learning rate techniques for fine-tuning the training process.
+    % This paper presents a comparative analysis of pretrained image classification architectures for the CIFAR-100 dataset, with a focus on finding a novel configuration that performs well within smaller budgets and datasets. 
+    % The study aims to identify an optimized model and its configuration that demonstrates superior performance compared to larger benchmarks like ImageNet, while considering resource constraints. 
+    % The evaluated architectures include ResNets, Vision Transformers (VIT), and Swin Transformers. 
+    % Two optimization techniques such as Adam and Adaptive Sharpness-Aware Minimization (ASAM) are examined to determine their impact on convergence and accuracy. 
+    % Finally we benchmark the performance of these architectures on the CIFAR-100 dataset and compare their accuracy with pretrained models.
+    
+    % The investigation incorporates the use of cosine annealing learning rate and step learning rate techniques for fine-tuning the training process.
     % By thoroughly comparing these architectures and optimization techniques, this research aims to identify a cost-effective and novel configuration for image classification tasks with smaller budgets and datasets.
+    
+    This paper aims to compare the performance of various image classification architectures 
+    on CIFAR-100 dataset and identify a cost-effective and novel configuration with smaller budgets and datasets.
+    The evaluated architectures include ResNets, Vision Transformers (VIT), and Swin Transformers. 
+    Two optimization techniques such as Adam and Adaptive Sharpness-Aware Minimization (ASAM) are examined
+    to determine their impact on convergence and accuracy. 
+    Finally we benchmark the performance of these architectures on the CIFAR-100 dataset and 
+    present faster convergence and higher accuracy for Adaptive Sharpness-Aware Minimization (ASAM) optimizer for Transformers.
+
 \end{abstract}
 
 \section{Introduction}
-Image classification plays a crucial role in computer vision, enabling machines to understand and categorize visual content. With the rapid advancements in deep learning, various architectures have been developed to tackle image classification tasks. In this report, we compare four prominent architectures for image classification on the CIFAR-100 dataset \cite{Krizhevsky09learningmultiple}: Vision Transformer (VIT), Convolutional Vision Transformer (CVT), Swin Transformer, and Residual Networks (ResNets).
+Image classification plays a crucial role in computer vision, enabling machines to understand and categorize visual content. 
+With the rapid advancements in deep learning, various architectures have been developed to tackle image classification tasks. 
+In this report, we compare three prominent architectures for image classification on the CIFAR-100 dataset: Vision Transformer (VIT), Swin Transformer, and Residual Networks (ResNets).
 
 % While we compare different architectures, not all architectures are finetuned from scratch. We utilize existing open source models provided by others to have a baseline accuracy. 
 
@@ -113,7 +130,7 @@ This analysis will provide valuable insights into the strengths and weaknesses o
 For the scope of this report, we do not experiment with CNN-based models, as they can be computationally expensive and require large amounts of data to train effectively.
 
 \section{Dataset}
-CIFAR-100 is a widely used benchmark dataset for image classification tasks.
+CIFAR-100 \cite{Krizhevsky09learningmultiple} is a widely used benchmark dataset for image classification tasks.
 It consists of 60,000 color images in a 32x32 pixel resolution, belonging to 100 fine-grained object categories.
 The dataset is divided into training and testing sets, with 50,000 and 10,000 images respectively.
 Each image is labeled with one of the 100 classes, providing a challenging task for image classification algorithms due to the high level of intra-class variation.
