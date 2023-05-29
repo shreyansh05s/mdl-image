@@ -4,8 +4,9 @@ import torch
 Sharpness-Aware Minimization (SAM) of Loss Landscape for Neural Networks
 https://arxiv.org/abs/2010.01412
 
-Github repo:
+Github repository with the official implementation of SAM:
 https://github.com/davda54/sam
+This file is a copy of the file sam.py from the official implementation.
 """	
 
 
