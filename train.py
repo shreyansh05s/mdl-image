@@ -140,20 +140,23 @@ if __name__ == "__main__":
     parser.add_argument("--train", type=bool, default=True)
     parser.add_argument("--model", type=str, default="vit")
     parser.add_argument("--freeze", type=bool, default=False)
+    parser.add_argument("--use_wandb", "-W", action="store_true")
+    parser.add_argument("--wandb_project", type=str, default="cifar100")
+    parser.add_argument("--wandb_entity", type=str, default=None)
 
     args = parser.parse_args()
 
     # keeping to default values for now
     args.freeze = models[args.model]["freeze"]
 
-    #### change the run name later
-    wandb.init(project="vit-cifar100", entity="leiden-catch-rl")
-    # wandb set run name
-    wandb.run.name = args.model
-    wandb.config.update(args)
+    if args.use_wandb:    
+        wandb.init(project=args.wandb_project, entity=args.wandb_entity)
+        # wandb set run name
+        wandb.run.name = args.model
+        wandb.config.update(args)
 
     # get run name from wandb
-    run_name = wandb.run.name
+    run_name = args.model
 
     model_dir = os.path.join("models", args.model)
 
@@ -252,14 +255,15 @@ if __name__ == "__main__":
                     optimizer.step()
                 scheduler.step()
 
-                wandb.log(
-                    {
-                        "loss": loss.item(),
-                        "learning_rate": scheduler.get_last_lr()[0],
-                        "epoch": epoch + 1,
-                        "step": i + 1,
-                    }
-                )
+                if args.use_wandb:
+                    wandb.log(
+                        {
+                            "loss": loss.item(),
+                            "learning_rate": scheduler.get_last_lr()[0],
+                            "epoch": epoch + 1,
+                            "step": i + 1,
+                        }
+                    )
 
                 if (
                     (i + 1) % 100 / batch_size == 0
@@ -300,9 +304,11 @@ if __name__ == "__main__":
             model.state_dict(),
             "{}/{}_cifar100_epoch_{}.pth".format(model_dir, args.model, epoch + 1),
         )
-        wandb.log({"accuracy": 100 * correct / total})
+        if args.use_wandb:
+            wandb.log({"accuracy": 100 * correct / total})
 
     # save the model
     torch.save(model.state_dict(), "{}/{}_cifar100.pth".format(model_dir, args.model))
-    # wandb.save("vit_cifar100.pth")
-    wandb.finish()
+    
+    if args.use_wandb:
+        wandb.finish()
