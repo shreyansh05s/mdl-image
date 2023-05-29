@@ -2,7 +2,7 @@ torch
 transformers
 evaluate
 wandb
-poillow
+pillow
 requests
 scikit-learn
 torchvision
