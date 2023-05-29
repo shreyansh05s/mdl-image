@@ -5,6 +5,8 @@
 - [Sharpness Aware Transformers for Cost-Efficient Image Classification](#sharpness-aware-transformers-for-cost-efficient-image-classification)
   - [Overview](#overview)
   - [Installation](#installation)
+      - [Additional setup for wandb logging](#additional-setup-for-wandb-logging)
+  - [Dataset](#dataset)
   - [Training](#training)
   - [Evaluation](#evaluation)
   - [Hyperparameter Tuning](#hyperparameter-tuning)
@@ -63,6 +65,10 @@ pip install -r requirements.txt
 ```bash
 wandb login
 ```
+
+## Dataset
+
+The CIFAR100 dataset is included in the `datasets` library. The dataset is downloaded and extracted automatically when the `train.py` or `eval.py` script is run.
 
 ## Training
 
