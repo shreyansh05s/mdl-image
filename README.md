@@ -1,9 +1,8 @@
-# SWIN Transformers for Cost-Efficient Image Classification
+# Sharpness Aware Transformers for Cost-Efficient Image Classification
 
 ## Table of Contents
 
-- [mdl-image](#mdl-image)
-  - [Table of Contents](#table-of-contents)
+- [Sharpness Aware Transformers for Cost-Efficient Image Classification](#sharpness-aware-transformers-for-cost-efficient-image-classification)
   - [Overview](#overview)
   - [Installation](#installation)
   - [Training](#training)
@@ -129,7 +128,7 @@ In this section, we will highlight steps to reproduce the experiments in the pap
 
 ### VIT
 
-To train a ViT model on CIFAR100, we can run the following:
+To train a ViT model on CIFAR100, we can run the following(also referred to as the VIT-ADAM experiment):
 
 ```bash
 python train.py --model vit --batch-size 32 --epochs 5 --lr 0.01 --optimizer adam --scheduler step
@@ -145,7 +144,7 @@ python train.py --model vit --batch-size 32 --epochs 5 --lr 0.01 --optimizer ada
 
 ### VIT-ASAM
 
-To train a ViT model with SAM optimizer on CIFAR100, we can run the following:
+To train a ViT model with SAM optimizer on CIFAR100, we can run the following(also referred to as the VIT-STEP experiment):
 
 ```bash
 python train.py --model vit --batch-size 32 --epochs 5 --lr 0.01 --optimizer sam
@@ -153,10 +152,10 @@ python train.py --model vit --batch-size 32 --epochs 5 --lr 0.01 --optimizer sam
 
 ### SWIN-ASAM
 
-To train a Swin Transformer model with SAM optimizer on CIFAR100, we can run the following:
+To train a Swin Transformer model with SAM optimizer on CIFAR100, we can run the following(also referred to as the SWIN-ASAM-FROZEN experiment):
 
 ```bash
-python train.py --model swin --batch-size 32 --epochs 5 --lr 0.01 --optimizer sam
+python train.py --model swin --batch-size 32 --epochs 5 --lr 0.01 --optimizer sam --freeze
 ```
 
 ## Benchmarking

@@ -96,7 +96,7 @@ models = {
             AutoImageProcessor.from_pretrained("google/vit-base-patch16-224-in21k")
         ),
         "model_dir": os.path.join(
-            "models", "vit", "effortless-wildflower-54", "vit_cifar100.pth"
+            "models", "vit", "vit_cifar100.pth"
         ),
     },
     "SWIN-ASAM": {
@@ -115,7 +115,7 @@ models = {
             ),
         ),
         "model_dir": os.path.join(
-            "models", "swin", "denim-cosmos-61", "swin_cifar100.pth"
+            "models", "swin", "swin_cifar100.pth"
         ),
     },
     "RESNET": {
