@@ -43,13 +43,6 @@ class TransformImage:
         return image
 
 
-def transform_image(image):
-    # inbuilt function in ViTFeatureExtractor for normalizing images
-    image = extractor(images=image, return_tensors="pt")
-    image["pixel_values"] = image["pixel_values"].squeeze()
-    return image
-
-
 # define a transform function to preprocess for ResNet
 def transform_image_RESNET(image):
     image = transforms.ToTensor()(image)
@@ -170,24 +163,33 @@ def eval(args):
     model = models[args.model]["model"]
 
     if "model_dir" in models[args.model]:
+        # define the model config
         config = models[args.model]["config"].from_pretrained(
             models[args.model]["model"]["pretrained"]
         )
         config.num_labels = 100
+
+        # instantiate the model
         model = ImageClassifier(
             num_classes=100, model=models[args.model]["model"], config=config
         )
 
+        # load the model weights
         model.load_state_dict(torch.load(models[args.model]["model_dir"]))
 
+    # define the image processor
     extractor = (
         models[args.model]["extractor"] if "extractor" in models[args.model] else None
     )
+
+    # define the transform function
     transform_image = (
         models[args.model]["transform_image"]
         if "transform_image" in models[args.model]
         else None
     )
+
+    # define the batch size
     batch_size = (
         models[args.model]["batch_size"]
         if "batch_size" in models[args.model]
@@ -200,6 +202,7 @@ def eval(args):
     model.to(device)
     model.eval()
 
+    # get the dataset
     test_dataset, test_dataloader = get_dataset(transform_image, batch_size)
 
     if batch_size is None:
