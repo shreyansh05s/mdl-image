@@ -23,6 +23,7 @@ import json
 import os
 from model import ImageClassifier
 from functools import partial
+from torchvision import transforms
 
 
 device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
@@ -34,6 +35,12 @@ with open("cifar100_classes.json", "r") as f:
 def transform_image(image):
     image = extractor(images=image, return_tensors="pt")
     image["pixel_values"] = image["pixel_values"].squeeze()
+    return image
+
+# define a transform function to preprocess for ResNet
+def transform_image_RESNET(image):
+    image = transforms.ToTensor()(image)
+    image = transforms.Normalize((0.5070, 0.4865, 0.4409), (0.2673, 0.2564, 0.2761))(image)
     return image
 
 
@@ -71,7 +78,9 @@ models = {
             "google/vit-base-patch16-224-in21k"
         ),
         "transform_image": transform_image,
-        "model_dir": os.path.join("models", "vit", "effortless-wildflower-54", "vit_cifar100.pth"),
+        "model_dir": os.path.join(
+            "models", "vit", "effortless-wildflower-54", "vit_cifar100.pth"
+        ),
     },
     "SWIN-ASAM": {
         "model": {
@@ -84,14 +93,22 @@ models = {
             "microsoft/swinv2-large-patch4-window12-192-22k"
         ),
         "transform_image": transform_image,
-        "model_dir": os.path.join("models", "swin","denim-cosmos-61", "swin_cifar100.pth"),
+        "model_dir": os.path.join(
+            "models", "swin", "denim-cosmos-61", "swin_cifar100.pth"
+        ),
+    },
+    "RESNET": {
+        "model": torch.hub.load(
+            "chenyaofo/pytorch-cifar-models", "cifar100_resnet56", pretrained=True
+        ),
+        "transform_image": transform_image_RESNET
     },
     # will not be used in the paper
-    "ALIGN": {
-        "model": AlignModel.from_pretrained("kakaobrain/align-base"),
-        "extractor": AlignProcessor.from_pretrained("kakaobrain/align-base"),
-        "transform_image": transform_image_ALIGN,
-    },
+    # "ALIGN": {
+    #     "model": AlignModel.from_pretrained("kakaobrain/align-base"),
+    #     "extractor": AlignProcessor.from_pretrained("kakaobrain/align-base"),
+    #     "transform_image": transform_image_ALIGN,
+    # },
 }
 
 
@@ -131,18 +148,21 @@ if __name__ == "__main__":
     model = models[args.model]["model"]
 
     if "model_dir" in models[args.model]:
-        config = models[args.model]["config"].from_pretrained(models[args.model]["model"]["pretrained"])
+        config = models[args.model]["config"].from_pretrained(
+            models[args.model]["model"]["pretrained"]
+        )
         config.num_labels = 100
         model = ImageClassifier(
             num_classes=100, model=models[args.model]["model"], config=config
         )
-        # model.load_state_dict(torch.load(models[args.model]))
-        # # above line fails with:
-        # # AttributeError: 'dict' object has no attribute 'seek'. You can only torch.load from a file that is seekable. Please pre-load the data into a buffer like io.BytesIO and try to load from it instead.
-        # # to fix thie we can do this instead
+
         model.load_state_dict(torch.load(models[args.model]["model_dir"]))
 
-    extractor = models[args.model]["extractor"]
+    extractor = (
+        models[args.model]["extractor"]
+        if "extractor" in models[args.model]
+        else None
+    )
     transform_image = (
         models[args.model]["transform_image"]
         if "transform_image" in models[args.model]
@@ -156,7 +176,6 @@ if __name__ == "__main__":
 
     if args.model == "ALIGN":
         classes_processed = extractor(text=cifar100_classes, return_tensors="pt")
-        # classes_processed.to(device)
 
     model.to(device)
     model.eval()
@@ -173,7 +192,10 @@ if __name__ == "__main__":
     for batch in tqdm(dataset):
         if type(batch[0]) == dict:
             b_input_ids = batch[0]
-            b_input_ids["pixel_values"] = b_input_ids["pixel_values"].to(device)
+            if "pixel_values" in b_input_ids:
+                b_input_ids["pixel_values"] = b_input_ids["pixel_values"].to(device)
+            else:
+                b_input_ids = {k: v.to(device) for k, v in b_input_ids.items()}
 
         else:
             b_input_ids = batch[0].to(device)
@@ -187,25 +209,22 @@ if __name__ == "__main__":
             classes_processed.to(device)
             b_input_ids.update(classes_processed)
 
-        # print(b_input_ids)
-        # print(b_input_ids.keys())
-        # print(b_input_ids["input_ids"].shape)
-        # print(b_input_ids["attention_mask"].shape)
-        # print(b_input_ids["token_type_ids"].shape)
-        # print(b_input_ids["pixel_values"].shape)
-
         with torch.no_grad():
-            outputs = model(**b_input_ids)
+            if args.model == "RESNET":
+                outputs = model(b_input_ids)
+            else:
+                outputs = model(**b_input_ids)
 
-        # print(outputs.keys())
-        # print(outputs)
-        try:
-            logits = outputs.logits
-        except:
-            logits_per_image = outputs.logits_per_image
+        if args.model == "RESNET":
+            logits = outputs
+        else:
+            try:
+                logits = outputs.logits
+            except:
+                logits_per_image = outputs.logits_per_image
 
-            # we can take the softmax to get the label probabilities
-            logits = logits_per_image.softmax(dim=1)
+                # we can take the softmax to get the label probabilities
+                logits = logits_per_image.softmax(dim=1)
 
         tmp_eval_accuracy = torch.sum(torch.argmax(logits, dim=1) == b_labels) / len(
             b_labels
