@@ -59,23 +59,23 @@
     % The evaluated architectures include ResNets, Vision Transformers (VIT), and Swin Transformers. 
     % Two optimization techniques such as Adam and Adaptive Sharpness-Aware Minimization (ASAM) are examined to determine their impact on convergence and accuracy. 
     % Finally we benchmark the performance of these architectures on the CIFAR-100 dataset and compare their accuracy with pretrained models.
-    
+
     % The investigation incorporates the use of cosine annealing learning rate and step learning rate techniques for fine-tuning the training process.
     % By thoroughly comparing these architectures and optimization techniques, this research aims to identify a cost-effective and novel configuration for image classification tasks with smaller budgets and datasets.
-    
-    This paper aims to compare the performance of various image classification architectures 
+
+    This paper aims to compare the performance of various image classification architectures
     on CIFAR-100 dataset and identify a cost-effective and novel configuration with smaller budgets and datasets.
-    The evaluated architectures include ResNets, Vision Transformers (VIT), and Swin Transformers. 
+    The evaluated architectures include ResNets, Vision Transformers (VIT), and Swin Transformers.
     Two optimization techniques such as Adam and Adaptive Sharpness-Aware Minimization (ASAM) are examined
-    to determine their impact on convergence and accuracy. 
-    Finally we benchmark the performance of these architectures on the CIFAR-100 dataset and 
+    to determine their impact on convergence and accuracy.
+    Finally we benchmark the performance of these architectures on the CIFAR-100 dataset and
     present faster convergence and higher accuracy for Adaptive Sharpness-Aware Minimization (ASAM) optimizer for Transformers.
 
 \end{abstract}
 
 \section{Introduction}
-Image classification plays a crucial role in computer vision, enabling machines to understand and categorize visual content. 
-With the rapid advancements in deep learning, various architectures have been developed to tackle image classification tasks. 
+Image classification plays a crucial role in computer vision, enabling machines to understand and categorize visual content.
+With the rapid advancements in deep learning, various architectures have been developed to tackle image classification tasks.
 In this report, we compare three prominent architectures for image classification on the CIFAR-100 dataset: Vision Transformer (VIT), Swin Transformer, and Residual Networks (ResNets).
 
 % While we compare different architectures, not all architectures are finetuned from scratch. We utilize existing open source models provided by others to have a baseline accuracy. 
@@ -95,20 +95,20 @@ By leveraging the knowledge and representations learned from these pretrained mo
 While pretrained models have been extensively used in image classification tasks, they are often evaluated on large-scale datasets like ImageNet. However, these models may not be suitable for smaller budgets and datasets, such as CIFAR-100. By conducting a thorough analysis of pretrained models on CIFAR-100, we aim to identify a cost-effective and novel configuration that performs well within smaller budgets and datasets.
 
 
-Through the exploration of various optimizer algorithms and hyperparameter tuning techniques, we aim to find the optimal settings for each architecture, 
-for futher fine-tuning the pretrained models. 
+Through the exploration of various optimizer algorithms and hyperparameter tuning techniques, we aim to find the optimal settings for each architecture,
+for further fine-tuning the pretrained models.
 % This approach allows us to evaluate and compare the architectures on a level playing field, ensuring that the reported results reflect the true capabilities of the pretrained models in handling the complexities presented by CIFAR-100.
 By considering multiple aspects, including accuracy, computational requirements, and generalization abilities, we aim to provide valuable insights for practitioners and researchers in selecting the most suitable pretrained architecture for image classification tasks on CIFAR-100.
 
 \section{Previous Work}
 % Mention CNN
-Significant progress has been made in image classification with the development of deep learning architectures. Traditional approaches primarily relied on convolutional neural networks (CNNs), such as the pioneering work of AlexNet (Krizhevsky et al., 2012). However, recent advancements have extended beyond CNNs to incorporate transformers, originally introduced for natural language processing tasks.
+Significant progress has been made in image classification with the development of deep learning architectures. Traditional approaches primarily relied on convolutional neural networks (CNNs). However, recent advancements have extended beyond CNNs to incorporate transformers, originally introduced for natural language processing tasks.
 
 % mention resnet
-Residual Networks (ResNets) proposed by He et al. (2015) have been widely adopted in image classification tasks. ResNets employ residual connections, enabling the construction of deep networks while mitigating the vanishing gradient problem. The skip connections in ResNets facilitate gradient flow during training, allowing for better convergence and improved performance.
+Residual Networks (ResNets) proposed by \cite{he2016deep} have been widely adopted in image classification tasks. ResNets employ residual connections, enabling the construction of deep networks while mitigating the vanishing gradient problem. The skip connections in ResNets facilitate gradient flow during training, allowing for better convergence and improved performance.
 
 % mention VIT and how its faster than CNN
-One notable architecture which showed the potential of transformers in image classification is the Vision Transformer (VIT), proposed by Dosovitskiy et al. (2020).
+One notable architecture which showed the potential of transformers in image classification is the Vision Transformer (VIT), proposed by \cite{DBLP:journals/corr/abs-2010-11929}.
 VIT revolutionized the field of image classification by leveraging self-attention mechanisms from transformers.
 % By replacing traditional convolutional layers with self-attention mechanisms, VIT allows for global information exchange among pixels, enabling the model to capture long-range dependencies within images.
 VIT has demonstrated impressive performance on large-scale datasets like ImageNet, showcasing its ability to learn meaningful representations from visual data.
@@ -122,7 +122,7 @@ VIT has demonstrated impressive performance on large-scale datasets like ImageNe
 
 % mention SWIN
 % REMOVE THIS PARAGRAPH IF IF DOESN'T FIT
-Another recent architecture that was developed to improve the performance of VIT is the Swin Transformer proposed by Liu et al. (2021).
+Another recent architecture that was developed to improve the performance of VIT is the Swin Transformer proposed by \cite{DBLP:journals/corr/abs-2103-14030}.
 Swin Transformer introduces hierarchical partitioning of image patches, allowing for efficient computation and capturing both local and global dependencies.
 % By using shift windows, Swin Transformer reduces the computational complexity associated with traditional self-attention mechanisms, making it more scalable for larger image sizes.
 
@@ -155,7 +155,7 @@ The top-1 accuracy is a widely used evaluation metric in image classification ta
 % Residual Networks (ResNets) have emerged as one of the pioneering architectures in image classification tasks, demonstrating remarkable performance across various datasets. Introduced by \cite{he2016deep}, ResNets address the challenge of training deep neural networks by utilizing residual connections. These connections enable the network to bypass layers and pass information directly through skip connections, mitigating the vanishing gradient problem and facilitating the training of much deeper networks. ResNets have consistently achieved state-of-the-art results in large-scale datasets like ImageNet, making them a valuable candidate for evaluation on smaller budgets and datasets, such as CIFAR-100.
 
 \subsection{VIT}
-Vision Transformers (VIT) have revolutionized the field of image classification by introducing the power of transformers into computer vision tasks. 
+Vision Transformers (VIT) have revolutionized the field of image classification by introducing the power of transformers into computer vision tasks.
 VIT replaces the traditional convolutional layers with self-attention mechanisms, enabling the model to capture global dependencies among pixels. VITs have shown impressive performance on large-scale datasets like ImageNet, showcasing their ability to learn meaningful representations from visual data. Thus, evaluating VITs on smaller budgets and datasets, such as CIFAR-100, allows us to assess their effectiveness in leveraging self-attention mechanisms for image classification tasks with limited resources.
 
 \begin{figure}[ht]
@@ -182,7 +182,7 @@ Swin Transformer, is a novel architecture that introduces hierarchical partition
 \section{Hyperparameter tuning}
 Hyperparameter tuning was performed for VIT and SWIN architectures.
 Weights and biases \cite{wandb} was used for logging the hyperparameters and visualizing the results.
-Models that were trained for the experiments were imagenet pretrained models which needed to be finetuned in order to evaluate on CIFAR-100. 
+Models that were trained for the experiments were imagenet pretrained models which needed to be finetuned in order to evaluate on CIFAR-100.
 The hyperparameters that were tuned for the experiments are listed in \textit{Table 1}.
 For decreasing the number of epochs to achieve higher accuracies we experimented with optimizers and learning rate schedulers.
 
@@ -212,7 +212,7 @@ Adam (Adaptive Moment Estimation) is an optimization algorithm commonly used in 
 Introduced by \cite{Kingma2014AdamAM}, Adam combines the advantages of adaptive learning rates and momentum-based optimization.
 It maintains adaptive learning rates for each parameter by utilizing estimations of both first-order moments (the mean) and second-order moments (the uncentered variance) of the gradients.
 By incorporating momentum, Adam effectively handles sparse gradients and accelerates convergence.
-For the experiments on ADAM we utilized models that were already finetuned on CIFAR-100 for VIT, SWIN, and Resnet model architectures.
+For the models that were trained on ADAM we utilized open source models that have already been finetuned on CIFAR-100 for VIT and SWIN.
 
 \subsubsection{ASAM}
 Adaptive Sharpness-Aware Minimization (ASAM) is an optimization algorithm introduced by \cite{DBLP:journals/corr/abs-2102-11600} to enhance gradient-based optimization in deep learning.
@@ -226,15 +226,15 @@ Evaluating SAM alongside Adam on different architectures, such as Vision Transfo
 
 \subsubsection{ADAM vs ASAM}
 From \textit{Figure 3} we can see that VIT-ASAM converges faster than VIT-ADAM.
-These results can be considered biased as the goal of the hyperparameter tuning was to find optimal paramteters for modeling with ASAM instead of ADAM and lesser exploration was done in order achieve better results from ADAM.
-
+These results are biased as the goal of the hyperparameter tuning was to find optimal parameters for modeling with ASAM instead of ADAM and lesser exploration was done in order achieve better results from ADAM.
+For a fair comparison we can refer to \textit{Table 2} which shows that VIT-ASAM outperforms VIT-ADAM by 3.5\% under 5 epochs when tuned properly.
 
 \begin{figure}[ht]
     \vskip 0.2in
     \centering
     \includegraphics[width=0.4\textwidth]{optimizers.png}
     \caption{Comparing our selected hyperparameters for VIT-ADAM and VIT-ASAM. This result itself is biased since VIT-ADAM pretrained already existed the goal of hyperparameter tuning was to find the best parameters for ASAM.}
-    \label{fig:foobar}
+
     \vskip -0.2in
 \end{figure}
 
@@ -264,7 +264,7 @@ This helps to stabilize the training process, prevent overfitting, and achieve h
     \vskip 0.2in
     \centering
     \includegraphics[width=0.4\textwidth]{learning_rate_schedulers.png}
-    \caption{A visualization of how a Cosine Annealing LR works compared to a Step annealing LR scheduler}
+    \caption{A visualization of how loss decreases for Cosine Annealing LR compared to a Step annealing LR scheduler}
     \label{fig:foobar}
     \vskip -0.2in
 \end{figure}
@@ -274,7 +274,7 @@ This helps to stabilize the training process, prevent overfitting, and achieve h
 In order to find cost-effective model configurations for CIFAR-100 dataset, the epochs were set to a maximum of 5.
 This was chosen based on current SOTA models usually having an average range of 5-20 epochs over a pretrained model.
 Then for the optimizer we chose ASAM as our primary optimizer as it reduces the loss value faster than ADAM and converges to the optima.
-Additionally from our hyperparameter tuning excercise we found both Cosine Annealing and Step LR to give good accuracies, but since we needed a faster convergence we decided to choose Step LR for it's lower variance.
+Additionally from our hyperparameter tuning exercise we found both Cosine Annealing and Step LR to give good accuracies, but since we needed a faster convergence we decided to choose Step LR for it's lower variance.
 
 % compare vit and swin on ASAM with selected hyperparameters
 \subsection{VIT VS SWIN}
@@ -283,11 +283,6 @@ And on the other hand SWIN-ASAM-frozen is the model pretrained on imagenet1k and
 
 The reason to finetune SWIN with frozen weights was that it didn't converge fast enough under 5 epochs with the same hyperparameters and additionally with the same hardware specifications the batch size needed to be reduced due to low GPU memory.
 Hence it was decided to freeze the weights of the SWIN model architecture.
-
-Looking at \textit{Figure 5} and \textit{Figure 6} we can see that VIT-ASAM outperforms SWIN-ASAM-frozen and gives a higher Top-1 accuracy of 92.85\% whereas SWIN-ASAM-frozen gives an accuracy of 92.023\%.
-Also it can be seen that SWIN performs better over the 1st epoch and over time diverges from the optima.
-Similar behaviour can be seen in \textit{Table 2} which showcases VIT outperforming SWIN for CIFAR-100 on the avaialable pretrained models.
-Finally, we can see that both the architectures show high standard deviation error which can be attributed to the small dataset size of CIFAR-100.
 
 \begin{figure}[ht]
     \vskip 0.2in
@@ -302,10 +297,16 @@ Finally, we can see that both the architectures show high standard deviation err
     \vskip 0.2in
     \centering
     \includegraphics[width=0.4\textwidth]{test_accuracy.png}
-    \caption{Visualization of loss decreasing over steps for VIT-ASAM and SWIN-ASAM-frozen. We can see that VIT-ASAM has a lower loss value after 5 epochs and converges to the optima.}
+    \caption{Visualization of Accuracy increasing over steps for VIT-ASAM and SWIN-ASAM-frozen. We can see that VIT-ASAM has a higher accuracy after 5 epochs.}
     \label{fig:foobar}
     \vskip -0.2in
 \end{figure}
+
+Looking at \textit{Figure 5} and \textit{Figure 6} we can see that VIT-ASAM outperforms SWIN-ASAM-frozen and gives a higher Top-1 accuracy of 92.85\% whereas SWIN-ASAM-frozen gives an accuracy of 92.023\%.
+Also it can be seen that SWIN performs better over the 1st epoch and over time diverges from the optima.
+Similar behavior can be seen in \textit{Table 2} which showcases VIT outperforming SWIN for CIFAR-100 on the available pretrained models.
+Finally, we can see that both the architectures show high standard deviation error which can be attributed to the small dataset size of CIFAR-100.
+
 
 \section{Results \& Discussion}
 From the experiments we were able to train 2 architectures which showcased high accuracies after intensive hyperparameter tuning and finetuning.
@@ -336,7 +337,7 @@ This can be attributed to the fact that Resnet pretrained weights are not readil
 \section{Conclusion and Future Work}
 To sum up, we have compared various model architectures on CIFAR-100 dataset.
 %  write the previous line better 
-Not all SOTA models/algorithms were implemented due to unavailabilioty of pretrained weigjts and limited computational power.
+Not all SOTA models were implemented due to unavailability of pretrained weights and limited computational power.
 Since the scope of the report was to find cost-effective model configurations CNN architectures were not considered, as previous works have shown that they are computationally expensive.
 
 From the experiments we can conclude that VIT-ASAM performs the best for CIFAR-100 dataset with an accuracy of 92.851\% and SWIN-ASAM is the second best model with an accuracy of 92.023\%.
