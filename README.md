@@ -75,13 +75,13 @@ python train.py --help
 For example, to train a ViT model on CIFAR100, we can run the following:
 
 ```bash
-python train.py --model vit --batch-size 32 --epochs 5 --lr 0.01 --optimizer sam
+python train.py --model vit --batch_size 32 --epochs 5 --lr 0.01 --optimizer sam
 ```
 
 For training with wandb logging, we can run the following:
 
 ```bash
-python train.py --model vit --batch-size 32 --epochs 5 --lr 0.01 --optimizer sam -W
+python train.py --model vit --batch_size 32 --epochs 5 --lr 0.01 --optimizer sam -W
 ```
 
 
@@ -131,7 +131,7 @@ In this section, we will highlight steps to reproduce the experiments in the pap
 To train a ViT model on CIFAR100, we can run the following(also referred to as the VIT-ADAM experiment):
 
 ```bash
-python train.py --model vit --batch-size 32 --epochs 5 --lr 0.01 --optimizer adam --scheduler step
+python train.py --model vit --batch_size 32 --epochs 5 --lr 0.01 --optimizer adam --scheduler step
 ```
 
 ### VIT-COSINE
@@ -139,7 +139,7 @@ python train.py --model vit --batch-size 32 --epochs 5 --lr 0.01 --optimizer ada
 To train a ViT model with cosine decay on CIFAR100, we can run the following:
 
 ```bash
-python train.py --model vit --batch-size 32 --epochs 5 --lr 0.01 --optimizer adam --scheduler cosine
+python train.py --model vit --batch_size 32 --epochs 5 --lr 0.01 --optimizer adam --scheduler cosine
 ```
 
 ### VIT-ASAM
@@ -147,7 +147,7 @@ python train.py --model vit --batch-size 32 --epochs 5 --lr 0.01 --optimizer ada
 To train a ViT model with SAM optimizer on CIFAR100, we can run the following(also referred to as the VIT-STEP experiment):
 
 ```bash
-python train.py --model vit --batch-size 32 --epochs 5 --lr 0.01 --optimizer sam
+python train.py --model vit --batch_size 32 --epochs 5 --lr 0.01 --optimizer sam
 ```
 
 ### SWIN-ASAM
@@ -155,7 +155,7 @@ python train.py --model vit --batch-size 32 --epochs 5 --lr 0.01 --optimizer sam
 To train a Swin Transformer model with SAM optimizer on CIFAR100, we can run the following(also referred to as the SWIN-ASAM-FROZEN experiment):
 
 ```bash
-python train.py --model swin --batch-size 32 --epochs 5 --lr 0.01 --optimizer sam --freeze
+python train.py --model swin --batch_size 32 --epochs 5 --lr 0.01 --optimizer sam --freeze
 ```
 
 ## Benchmarking
