@@ -33,14 +33,19 @@ with open("cifar100_classes.json", "r") as f:
 
 
 def transform_image(image):
+    # inbuilt function in ViTFeatureExtractor for normalizing images
     image = extractor(images=image, return_tensors="pt")
     image["pixel_values"] = image["pixel_values"].squeeze()
     return image
 
+
 # define a transform function to preprocess for ResNet
 def transform_image_RESNET(image):
     image = transforms.ToTensor()(image)
-    image = transforms.Normalize((0.5070, 0.4865, 0.4409), (0.2673, 0.2564, 0.2761))(image)
+    # values from github repo for cifar100-pytorch-models
+    image = transforms.Normalize((0.5070, 0.4865, 0.4409), (0.2673, 0.2564, 0.2761))(
+        image
+    )
     return image
 
 
@@ -101,7 +106,7 @@ models = {
         "model": torch.hub.load(
             "chenyaofo/pytorch-cifar-models", "cifar100_resnet56", pretrained=True
         ),
-        "transform_image": transform_image_RESNET
+        "transform_image": transform_image_RESNET,
     },
     # will not be used in the paper
     # "ALIGN": {
@@ -121,17 +126,10 @@ def get_dataset(transform_image=None, batch_size=16):
         test_dataloader = None
     else:
         test_dataloader = DataLoader(
-            test_dataset, batch_size=8, shuffle=True, num_workers=4, pin_memory=True
+            test_dataset, batch_size=batch_size, shuffle=True, num_workers=4, pin_memory=True
         )
 
     return test_dataset, test_dataloader
-
-
-# define a helper function to calculate the accuracy
-def flat_accuracy(preds, labels):
-    pred_flat = np.argmax(preds, axis=1).flatten()
-    labels_flat = labels.flatten()
-    return accuracy_score(labels_flat, pred_flat)
 
 
 def parse_args():
@@ -159,9 +157,7 @@ if __name__ == "__main__":
         model.load_state_dict(torch.load(models[args.model]["model_dir"]))
 
     extractor = (
-        models[args.model]["extractor"]
-        if "extractor" in models[args.model]
-        else None
+        models[args.model]["extractor"] if "extractor" in models[args.model] else None
     )
     transform_image = (
         models[args.model]["transform_image"]
@@ -189,7 +185,8 @@ if __name__ == "__main__":
 
     eval_accuracy = 0
     nb_eval_steps = 0
-    for batch in tqdm(dataset):
+    pb = tqdm(dataset)
+    for batch in pb:
         if type(batch[0]) == dict:
             b_input_ids = batch[0]
             if "pixel_values" in b_input_ids:
@@ -232,7 +229,7 @@ if __name__ == "__main__":
 
         eval_accuracy += tmp_eval_accuracy
         nb_eval_steps += 1
-        if nb_eval_steps % 100 == 0:
-            tqdm.write("Accuracy: {}".format(eval_accuracy / nb_eval_steps))
+        if nb_eval_steps % 50 == 0:
+            pb.set_description("Accuracy: {}".format(eval_accuracy / nb_eval_steps))
 
-    print("Accuracy: {}".format(eval_accuracy / nb_eval_steps))
+    print("Model {}, accuracy: {}".format(args.model, eval_accuracy / nb_eval_steps))
