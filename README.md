@@ -34,7 +34,7 @@ Optimizer:
 
 ## Installation
 
-First insure python 3.8.10 is installed.
+First insure python 3.8.10 or higher is installed.
 
 Then create a virtual environment.
 
